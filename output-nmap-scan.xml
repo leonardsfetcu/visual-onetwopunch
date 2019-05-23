@@ -31,17 +31,52 @@
 <ports><extraports state="closed" count="9968">
 <extrareasons reason="resets" count="9968"/>
 </extraports>
-<port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="ftp" product="Microsoft ftpd" ostype="Windows" method="probed" conf="10"><cpe>cpe:/a:microsoft:ftp_service</cpe><cpe>cpe:/o:microsoft:windows</cpe></service><script id="vulscan"/></port>
-<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="ssh" product="OpenSSH" version="7.1" extrainfo="protocol 2.0" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:7.1</cpe></service><script id="vulners" output="&#xa;  cpe:/a:openbsd:openssh:7.1: &#xa;&#x9;CVE-2016-8858&#x9;&#x9;7.8&#x9;&#x9;https://vulners.com/cve/CVE-2016-8858&#xa;&#x9;CVE-2016-1908&#x9;&#x9;7.5&#x9;&#x9;https://vulners.com/cve/CVE-2016-1908&#xa;&#x9;CVE-2016-1907&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-1907&#xa;&#x9;CVE-2016-10708&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-10708&#xa;&#x9;CVE-2018-15919&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2018-15919&#xa;&#x9;CVE-2017-15906&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2017-15906&#xa;&#x9;CVE-2016-0778&#x9;&#x9;4.6&#x9;&#x9;https://vulners.com/cve/CVE-2016-0778&#xa;&#x9;CVE-2016-0777&#x9;&#x9;4.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-0777"><elem key="cpe:/a:openbsd:openssh:7.1">&#xa;&#x9;CVE-2016-8858&#x9;&#x9;7.8&#x9;&#x9;https://vulners.com/cve/CVE-2016-8858&#xa;&#x9;CVE-2016-1908&#x9;&#x9;7.5&#x9;&#x9;https://vulners.com/cve/CVE-2016-1908&#xa;&#x9;CVE-2016-1907&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-1907&#xa;&#x9;CVE-2016-10708&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-10708&#xa;&#x9;CVE-2018-15919&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2018-15919&#xa;&#x9;CVE-2017-15906&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2017-15906&#xa;&#x9;CVE-2016-0778&#x9;&#x9;4.6&#x9;&#x9;https://vulners.com/cve/CVE-2016-0778&#xa;&#x9;CVE-2016-0777&#x9;&#x9;4.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-0777</elem>
-</script><script id="vulscan"/></port>
-<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="http" product="Microsoft IIS httpd" version="7.5" ostype="Windows" method="probed" conf="10"><cpe>cpe:/a:microsoft:iis:7.5</cpe><cpe>cpe:/o:microsoft:windows</cpe></service><script id="http-server-header" output="Microsoft-IIS/7.5"><elem>Microsoft-IIS/7.5</elem>
-</script><script id="vulners" output="&#xa;  cpe:/a:microsoft:iis:7.5: &#xa;&#x9;CVE-2010-3972&#x9;&#x9;10.0&#x9;&#x9;https://vulners.com/cve/CVE-2010-3972&#xa;&#x9;CVE-2010-2730&#x9;&#x9;9.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-2730&#xa;&#x9;CVE-2010-1256&#x9;&#x9;8.5&#x9;&#x9;https://vulners.com/cve/CVE-2010-1256&#xa;&#x9;CVE-2010-1899&#x9;&#x9;4.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-1899&#xa;&#x9;CVE-2012-2531&#x9;&#x9;2.1&#x9;&#x9;https://vulners.com/cve/CVE-2012-2531"><elem key="cpe:/a:microsoft:iis:7.5">&#xa;&#x9;CVE-2010-3972&#x9;&#x9;10.0&#x9;&#x9;https://vulners.com/cve/CVE-2010-3972&#xa;&#x9;CVE-2010-2730&#x9;&#x9;9.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-2730&#xa;&#x9;CVE-2010-1256&#x9;&#x9;8.5&#x9;&#x9;https://vulners.com/cve/CVE-2010-1256&#xa;&#x9;CVE-2010-1899&#x9;&#x9;4.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-1899&#xa;&#x9;CVE-2012-2531&#x9;&#x9;2.1&#x9;&#x9;https://vulners.com/cve/CVE-2012-2531</elem>
-</script><script id="vulscan"/></port>
+<port protocol="tcp" portid="21">
+	<state state="open" reason="syn-ack" reason_ttl="128"/>
+	<service name="ftp" product="Microsoft ftpd" ostype="Windows" method="probed" conf="10">
+		<cpe>cpe:/a:microsoft:ftp_service</cpe>
+		<cpe>cpe:/o:microsoft:windows</cpe>
+	</service>
+	<script id="vulscan"/>
+</port>
+<port protocol="tcp" portid="22">
+	<state state="open" reason="syn-ack" reason_ttl="128"/>
+		<service name="ssh" product="OpenSSH" version="7.1" extrainfo="protocol 2.0" method="probed" conf="10">
+			<cpe>cpe:/a:openbsd:openssh:7.1</cpe>
+		</service>
+	<script id="vulners" output="&#xa;  cpe:/a:openbsd:openssh:7.1: &#xa;&#x9;CVE-2016-8858&#x9;&#x9;7.8&#x9;&#x9;https://vulners.com/cve/CVE-2016-8858&#xa;&#x9;CVE-2016-1908&#x9;&#x9;7.5&#x9;&#x9;https://vulners.com/cve/CVE-2016-1908&#xa;&#x9;CVE-2016-1907&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-1907&#xa;&#x9;CVE-2016-10708&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-10708&#xa;&#x9;CVE-2018-15919&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2018-15919&#xa;&#x9;CVE-2017-15906&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2017-15906&#xa;&#x9;CVE-2016-0778&#x9;&#x9;4.6&#x9;&#x9;https://vulners.com/cve/CVE-2016-0778&#xa;&#x9;CVE-2016-0777&#x9;&#x9;4.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-0777">
+		<elem key="cpe:/a:openbsd:openssh:7.1">
+			&#xa;&#x9;CVE-2016-8858&#x9;&#x9;7.8&#x9;&#x9;https://vulners.com/cve/CVE-2016-8858&#xa;&#x9;CVE-2016-1908&#x9;&#x9;7.5&#x9;&#x9;https://vulners.com/cve/CVE-2016-1908&#xa;&#x9;CVE-2016-1907&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-1907&#xa;&#x9;CVE-2016-10708&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-10708&#xa;&#x9;CVE-2018-15919&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2018-15919&#xa;&#x9;CVE-2017-15906&#x9;&#x9;5.0&#x9;&#x9;https://vulners.com/cve/CVE-2017-15906&#xa;&#x9;CVE-2016-0778&#x9;&#x9;4.6&#x9;&#x9;https://vulners.com/cve/CVE-2016-0778&#xa;&#x9;CVE-2016-0777&#x9;&#x9;4.0&#x9;&#x9;https://vulners.com/cve/CVE-2016-0777
+		</elem>
+	</script>
+	<script id="vulscan"/>
+</port>
+<port protocol="tcp" portid="80">
+	<state state="open" reason="syn-ack" reason_ttl="128"/>
+	<service name="http" product="Microsoft IIS httpd" version="7.5" ostype="Windows" method="probed" conf="10">
+		<cpe>cpe:/a:microsoft:iis:7.5</cpe><cpe>cpe:/o:microsoft:windows</cpe>
+	</service>
+	<script id="http-server-header" output="Microsoft-IIS/7.5">
+		<elem>Microsoft-IIS/7.5</elem>
+	</script>
+	<script id="vulners" output="&#xa;  cpe:/a:microsoft:iis:7.5: &#xa;&#x9;CVE-2010-3972&#x9;&#x9;10.0&#x9;&#x9;https://vulners.com/cve/CVE-2010-3972&#xa;&#x9;CVE-2010-2730&#x9;&#x9;9.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-2730&#xa;&#x9;CVE-2010-1256&#x9;&#x9;8.5&#x9;&#x9;https://vulners.com/cve/CVE-2010-1256&#xa;&#x9;CVE-2010-1899&#x9;&#x9;4.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-1899&#xa;&#x9;CVE-2012-2531&#x9;&#x9;2.1&#x9;&#x9;https://vulners.com/cve/CVE-2012-2531">
+		<elem key="cpe:/a:microsoft:iis:7.5">
+			&#xa;&#x9;CVE-2010-3972&#x9;&#x9;10.0&#x9;&#x9;https://vulners.com/cve/CVE-2010-3972&#xa;&#x9;CVE-2010-2730&#x9;&#x9;9.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-2730&#xa;&#x9;CVE-2010-1256&#x9;&#x9;8.5&#x9;&#x9;https://vulners.com/cve/CVE-2010-1256&#xa;&#x9;CVE-2010-1899&#x9;&#x9;4.3&#x9;&#x9;https://vulners.com/cve/CVE-2010-1899&#xa;&#x9;CVE-2012-2531&#x9;&#x9;2.1&#x9;&#x9;https://vulners.com/cve/CVE-2012-2531
+		</elem>
+	</script>
+	<script id="vulscan"/>
+</port>
 <port protocol="tcp" portid="135"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="msrpc" product="Microsoft Windows RPC" ostype="Windows" method="probed" conf="10"><cpe>cpe:/o:microsoft:windows</cpe></service><script id="vulscan"/></port>
 <port protocol="tcp" portid="139"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="netbios-ssn" product="Microsoft Windows netbios-ssn" ostype="Windows" method="probed" conf="10"><cpe>cpe:/o:microsoft:windows</cpe></service><script id="vulscan"/></port>
 <port protocol="tcp" portid="445"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="microsoft-ds" product="Microsoft Windows Server 2008 R2 - 2012 microsoft-ds" ostype="Windows Server 2008 R2 - 2012" method="probed" conf="10"><cpe>cpe:/o:microsoft:windows</cpe></service><script id="vulscan"/></port>
 <port protocol="tcp" portid="1617"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="rmiregistry" product="Java RMI" method="probed" conf="10"/><script id="vulscan"/></port>
-<port protocol="tcp" portid="3306"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="mysql" product="MySQL" version="5.5.20-log" method="probed" conf="10"><cpe>cpe:/a:mysql:mysql:5.5.20-log</cpe></service><script id="vulscan"/></port>
+<port protocol="tcp" portid="3306">
+	<state state="open" reason="syn-ack" reason_ttl="128"/>
+	<service name="mysql" product="MySQL" version="5.5.20-log" method="probed" conf="10">
+		<cpe>cpe:/a:mysql:mysql:5.5.20-log</cpe>
+	</service>
+	<script id="vulscan"/>
+</port>
 <port protocol="tcp" portid="3389"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="ms-wbt-server" method="table" conf="3"/></port>
 <port protocol="tcp" portid="3700"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="giop" product="CORBA naming service" method="probed" conf="10"/><script id="vulscan"/></port>
 <port protocol="tcp" portid="4848"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="appserv-http" tunnel="ssl" method="table" conf="3"/></port>
