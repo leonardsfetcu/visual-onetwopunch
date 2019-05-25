@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Visual One-Two Punch</title>  
+    <title>Visual OTP - Dashboard</title>  
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -24,7 +24,7 @@
         <button type="button" class="btn btn-outline-info ml-3">Dashboard</button>
       </li>
       <li class="nav-item">
-        <button type="button" class="btn btn-outline-info ml-3">Scanner</button>
+        <a href="scanner.php"><button type="button" class="btn btn-outline-info ml-3">Scanner</button></a>
       </li>
       <li class="nav-item">
         <button type="button" class="btn btn-outline-info ml-3">Results</button>
@@ -98,15 +98,15 @@
             </div>
         </div>
 </div>
-<div class="container-fluid">
-    <div class="row p-3">
-        <div id="pieChartOS" class="col-md" style="height: 250px;width: 100%">
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div id="pieChartOS" class="col-md mx-1" style="height: 250px;width: 100%">
         </div>
-        <div id="pieChartVuln" class="col-md" style="height: 250px; width: 100%">
+        <div id="pieChartVuln" class="col-md mx-1" style="height: 250px; width: 100%">
         </div>
     </div>
-    <div class="row px-2 my-4">
-         <div id="lineChartContainer" style="height: 250px; width: 100%;">
+    <div class="row">
+         <div id="lineChartContainer" style="height: 250px; width: 100%">
         </div>
     </div>
     

@@ -100,12 +100,12 @@ window.onload = function () {
         yValueFormatString: "#,##0.00\"%\"",
         indexLabel: "{label} ({y})",
         dataPoints: [
-        {label: "80",y:"43.0"},
-        {label:"443",y:"31"},
-        {label:"21",y:"12"},
-        {label:"22",y:"7"},
-        {label:"135",y:"3"},
-        {label:"8080",y:"4"}
+        {label: "Port 80",y:"43.0"},
+        {label:"Port 443",y:"31"},
+        {label:"Port 21",y:"12"},
+        {label:"Port 22",y:"7"},
+        {label:"Port 135",y:"3"},
+        {label:"Port 8080",y:"4"}
         ]
       }]
     });
