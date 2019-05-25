@@ -93,17 +93,19 @@ window.onload = function () {
     var pieChartVuln = new CanvasJS.Chart("pieChartVuln", {
       animationEnabled: true,
       title: {
-        text: "Vulnerability Distribution"
+        text: "Open Port Distribution"
       },
       data: [{
         type: "pie",
         yValueFormatString: "#,##0.00\"%\"",
         indexLabel: "{label} ({y})",
         dataPoints: [
-        {label: "Low",y:"64.0",color:"#007bff"},
-        {label:"Medium",y:"12",color:"#28a745"},
-        {label:"High",y:"8",color:"#ffc107"},
-        {label:"Critical",y:"16",color: "#dc3545"}
+        {label: "80",y:"43.0"},
+        {label:"443",y:"31"},
+        {label:"21",y:"12"},
+        {label:"22",y:"7"},
+        {label:"135",y:"3"},
+        {label:"8080",y:"4"}
         ]
       }]
     });

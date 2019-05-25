@@ -35,44 +35,78 @@
     </ul>
   </div>  
 </nav>
-<br>
 <div class="container-fluid">
     <div class="row">
-        <div class="container-fluid">
-            <h4 class="text-secondary">Current Vulnerabilities</h4>
+        <div class="col-md border mt-2 mx-2">
+             <div class="row">
+                <div class="container-fluid">
+                    <h4 class="text-secondary">Current Vulnerabilities</h4>
+                </div>
+            </div>
+            <div class="row text-white" style="padding: 5px">
+                <div class="col-md bg-danger rounded" style="margin: 1px;">
+                    <h2 class="text-center">13</h2>
+                    <h6 class="text-center">Critical Risk</h6>
+                </div>
+                <div class="col-md bg-warning rounded" style="margin: 1px;">
+                    <h2 class="text-center">23</h2>
+                    <h6 class="text-center">High Risk</h6>
+                </div>
+                <div class="col-md bg-success rounded" style="margin: 1px;">
+                    <h2 class="text-center">3</h2>
+                    <h6 class="text-center">Medium Risk</h6>
+                </div>
+                <div class="col-md bg-primary rounded" style="margin: 1px;">
+                    <h2 class="text-center">21</h2>
+                    <h6 class="text-center">Low Risk</h6>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row text-white">
-        <div class="col-md bg-danger rounded" style="margin: 1px;">
-            <h2 class="text-center">13</h2>
-            <h6 class="text-center">Critical Risk</h6>
-        </div>
-        <div class="col-md bg-warning rounded" style="margin: 1px;">
-            <h2 class="text-center">23</h2>
-            <h6 class="text-center">High Risk</h6>
-        </div>
-        <div class="col-md bg-success rounded" style="margin: 1px;">
-            <h2 class="text-center">3</h2>
-            <h6 class="text-center">Medium Risk</h6>
-        </div>
-        <div class="col-md bg-primary rounded" style="margin: 1px;">
-            <h2 class="text-center">21</h2>
-            <h6 class="text-center">Low Risk</h6>
-        </div>
-    </div>
+        <div class="col-md border mt-2 mx-2">
+             <div class="row">
+                <div class="container-fluid">
+                    <h4 class="text-secondary">Dashboard</h4>
+                </div>
+            </div>
+            <div class="row text-white">
+                <div class="col-md" style="margin: 1px">
+                    <div class="row" style="padding: 5px">
+                        <div class="col bg-info rounded">
+                            <h2 class="text-center">26</h2>
+                            <h6 class="text-center">Scans</h6>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="col-md" style="margin: 1px">
+                    <div class="row" style="padding: 5px">
+                        <div class="col bg-info rounded">
+                            <h2 class="text-center">126</h2>
+                            <h6 class="text-center">Hosts Found</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md" style="margin: 1px">
+                    <div class="row" style="padding: 5px">
+                        <div class="col bg-info rounded">
+                            <h2 class="text-center">26</h2>
+                            <h6 class="text-center">Services Found</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
 <div class="container-fluid">
-    
-    <div class="row px-2 my-4">
-         <div id="lineChartContainer" style="height: 250px; width: 100%;">
-        </div>
-    </div>
-    
     <div class="row p-3">
         <div id="pieChartOS" class="col-md" style="height: 250px;width: 100%">
         </div>
         <div id="pieChartVuln" class="col-md" style="height: 250px; width: 100%">
+        </div>
+    </div>
+    <div class="row px-2 my-4">
+         <div id="lineChartContainer" style="height: 250px; width: 100%;">
         </div>
     </div>
     
