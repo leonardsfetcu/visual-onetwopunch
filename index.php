@@ -14,20 +14,17 @@
 <body>
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <a class="navbar-brand" href="#">Visual OTP</a>
+  <h5 class="navbar-brand" href="#">Visual OTP</h5>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <button type="button" class="btn btn-outline-info ml-3">Dashboard</button>
+        <a href="index.php"><button type="button" class="btn btn-outline-info ml-3">Dashboard</button></a>
       </li>
       <li class="nav-item">
         <a href="scanner.php"><button type="button" class="btn btn-outline-info ml-3">Scanner</button></a>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="btn btn-outline-info ml-3">Results</button>
       </li>
       <li class="nav-item">
         <button type="button" class="btn btn-outline-info ml-3">Reports</button>
