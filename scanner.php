@@ -116,7 +116,7 @@
 		</div>
 	</div>
 </div>
-<div class="container my-5">
+<div class="container my-5 border border-top-0">
 	<div class="row bg-info">
 		<div class="col-md text-center">
 			<h3 class="text-white p-4">Scanner List</h3>
