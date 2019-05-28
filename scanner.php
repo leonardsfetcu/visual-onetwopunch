@@ -10,6 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script type="text/javascript" src="lineChart.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
@@ -38,7 +39,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md border border-top-0">
+		<div class="col-md border border-top-0 pb-4 pt-2">
 			<h3>Create a new scanner</h3>
 			  	<div class="row">
 					<div class="col-md px-4 py-2">
@@ -109,32 +110,229 @@
 					  	</div>
 					</div>
 				</div>
-				<div class="row p-4">
+				<div class="row px-4">
 					<button type="button" class="btn btn-primary btn-block">Submit</button>
 				</div>
 		</div>
 	</div>
 </div>
-<div class="container my-4">
+<div class="container my-5">
 	<div class="row bg-info">
 		<div class="col-md text-center">
 			<h3 class="text-white p-4">Scanner List</h3>
 		</div>
 	</div>	
 	<div class="row">
-		<div class="col-md border border-top-0">
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
-			<h1>DADADADADA</h1>
+		<div class="col-md">
+			<table class="table table-hover table-responsive">
+			    <thead class="thead-dark">
+				    <tr>
+				    	<th>Status</th>
+					    <th>Scanner</th>
+					    <th>Target</th>
+					    <th>Last scan</th>
+					    <th class="w-50">Vulnerabilities</th>
+					    <th align="center">Actions</th>
+				    </tr>
+			    </thead>
+			    <tbody>
+					<tr>
+						<td style="padding-left: 20px">
+							<div class="spinner-border text-muted"></div>
+						</td>
+						<td>Metasploitable3 - Ubuntu Server scanner</td>
+						<td>172.128.28.5</td>
+						<td>10/05/2019 22:09:15</td>
+						<td>
+							<div class="progress border">
+								<div class="progress-bar bg-primary" style="width:40%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:25%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>Metasploitable3 - Windows 2008 Server R2 scanner</td>
+						<td>192.168.0.100</td>
+						<td>11/04/2019 12:29:05</td>
+						<td>
+							<div class="progress border">
+							   <div class="progress-bar bg-primary" style="width:34%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:28%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>Metasploitable2 - Linux scanner</td>
+						<td>172.128.28.5</td>
+						<td>19/04/2019 15:43:07</td>
+						<td>
+							<div class="progress border">
+							    <div class="progress-bar bg-primary" style="width:4%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:65%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:21%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red;margin-left: 10px;"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>WiFiMotoc Network scanner</td>
+						<td>10.10.2.1/18</td>
+						<td>21/04/2019 09:29:05</td>
+						<td>
+							<div class="progress border">
+							    <div class="progress-bar bg-primary" style="width:40%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:25%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>DVL scanner</td>
+						<td>172.128.28.5</td>
+						<td>21/04/2019 12:36:55</td>
+						<td>
+							<div class="progress border">
+								<div class="progress-bar bg-primary" style="width:40%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:25%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>Kioptrix Lvl 2 scanner</td>
+						<td>192.168.0.100</td>
+						<td>23/04/2019 16:55:05</td>
+						<td>
+							<div class="progress border">
+							   <div class="progress-bar bg-primary" style="width:34%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:28%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>Kioptrix Lvl 1 scanner</td>
+						<td>172.128.28.5</td>
+						<td>30/04/2019 00:00:05</td>
+						<td>
+							<div class="progress border">
+							    <div class="progress-bar bg-primary" style="width:4%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:65%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:21%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+					<tr>
+						<td class="px-4">
+							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
+						</td>
+						<td>WiFiStudenti Network scanner</td>
+						<td>10.10.2.1/18</td>
+						<td>05/05/2019 12:29:05</td>
+						<td>
+							<div class="progress border">
+							    <div class="progress-bar bg-primary" style="width:40%">
+							    </div>
+							    <div class="progress-bar bg-success" style="width:25%">
+							    </div>
+							    <div class="progress-bar bg-warning" style="width:10%">
+							    </div>
+							    <div class="progress-bar bg-danger" style="width:5%">
+							    </div>
+  							</div>
+						</td>
+						<td>
+							<i class="fas fa-redo-alt fa-lg"></i>
+							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+						</td>
+					</tr>
+			    </tbody>
+		    </table>
 		</div>
 	</div>
+		   
 </div>
 </body>
 </html>
