@@ -14,10 +14,10 @@ if [[ ! -d "$path/$(date '+%d-%m-%Y')" ]]; then
 fi
 path=$path/$(date '+%d-%m-%Y')
 
-start=$(date '+%d-%m-%Y %H:%M:%S')
+start=$(date '+%d-%m-%Y %H-%M-%S')
 
 # craft the path for current scan
-path="$path/$(date '+%H:%M:%S')"
+path="$path/$(date '+%H-%M-%S')"
 mkdir $path
 
 # if target is a subnet make host discovery and save result in hosts.txt
