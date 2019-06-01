@@ -27,7 +27,7 @@
         <a href="scanner.php"><button type="button" class="btn btn-outline-info ml-3">Scanner</button></a>
       </li>
       <li class="nav-item">
-        <button type="button" class="btn btn-outline-info ml-3">Reports</button>
+        <a href="reports.php"><button type="button" class="btn btn-outline-info ml-3">Reports</button></a>
       </li>    
     </ul>
   </div>  

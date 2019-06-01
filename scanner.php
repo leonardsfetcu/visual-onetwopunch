@@ -14,23 +14,23 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
-<h5 class="navbar-brand">Visual OTP</h5>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a href="index.php"><button type="button" class="btn btn-outline-info ml-3">Dashboard</button></a>
-      </li>
-      <li class="nav-item">
-        <a href="scanner.php"><button type="button" class="btn btn-outline-info ml-3">Scanner</button></a>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="btn btn-outline-info ml-3">Reports</button>
-      </li>    
-    </ul>
-  </div>  
+	<h5 class="navbar-brand">Visual OTP</h5>
+  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    	<span class="navbar-toggler-icon"></span>
+  	</button>
+	<div class="collapse navbar-collapse" id="collapsibleNavbar">
+	    <ul class="navbar-nav">
+		    <li class="nav-item">
+		        <a href="index.php"><button type="button" class="btn btn-outline-info ml-3">Dashboard</button></a>
+		    </li>
+	      	<li class="nav-item">
+	        	<a href="scanner.php"><button type="button" class="btn btn-outline-info ml-3">Scanner</button></a>
+	      	</li>
+	      	<li class="nav-item">
+	        	<a href="reports.php"><button type="button" class="btn btn-outline-info ml-3">Reports</button></a>
+	      	</li>    
+	    </ul>
+	</div>  
 </nav>
 <div class="container" style="margin-top:60px">
 	<div class="row bg-info">
@@ -136,11 +136,13 @@
 				    </tr>
 			    </thead>
 			    <tbody>
-					<tr>
+					<tr class="clickable-row" data-href="reports.php">
 						<td style="padding-left: 20px">
 							<div class="spinner-border text-muted"></div>
 						</td>
-						<td>Metasploitable3 - Ubuntu Server scanner</td>
+						<td>
+							Metasploitable3 - Ubuntu Server scanner
+						</td>
 						<td>172.128.28.5</td>
 						<td>10/05/2019 22:09:15</td>
 						<td>
@@ -160,7 +162,7 @@
 							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
 						</td>
 					</tr>
-					<tr>
+					<tr class="clickable-row" data-href="reports.php">
 						<td class="px-4">
 							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
 						</td>
@@ -213,7 +215,7 @@
 							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
 						</td>
 						<td>WiFiMotoc Network scanner</td>
-						<td>10.10.2.1/18</td>
+						<td>10.10.2.1-100</td>
 						<td>21/04/2019 09:29:05</td>
 						<td>
 							<div class="progress border">
@@ -309,7 +311,7 @@
 							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
 						</td>
 						<td>WiFiStudenti Network scanner</td>
-						<td>10.10.2.1/18</td>
+						<td>10.10.2.1-255</td>
 						<td>05/05/2019 12:29:05</td>
 						<td>
 							<div class="progress border">
@@ -331,8 +333,14 @@
 			    </tbody>
 		    </table>
 		</div>
-	</div>
-		   
+	</div>		   
 </div>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
 </body>
 </html>
