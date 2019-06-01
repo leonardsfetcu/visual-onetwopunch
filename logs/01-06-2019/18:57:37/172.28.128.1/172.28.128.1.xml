@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.70 scan initiated Sat Jun  1 19:01:40 2019 as: nmap -sV -&#45;script nmap-vulners -O -T4 -sS -sU -p T:80,3306,4433,5040,7680,U:137 -oX logs/01-06-2019/18:57:37/172.28.128.1/172.28.128.1.xml 172.28.128.1 -->
+<nmaprun scanner="nmap" args="nmap -sV -&#45;script nmap-vulners -O -T4 -sS -sU -p T:80,3306,4433,5040,7680,U:137 -oX logs/01-06-2019/18:57:37/172.28.128.1/172.28.128.1.xml 172.28.128.1" start="1559430100" startstr="Sat Jun  1 19:01:40 2019" version="7.70" xmloutputversion="1.04">
+<scaninfo type="syn" protocol="tcp" numservices="5" services="80,3306,4433,5040,7680"/>
+<scaninfo type="udp" protocol="udp" numservices="1" services="137"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1559430101" endtime="1559430265"><status state="up" reason="arp-response" reason_ttl="0"/>
+<address addr="172.28.128.1" addrtype="ipv4"/>
+<address addr="0A:00:27:00:00:18" addrtype="mac"/>
+<hostnames>
+<hostname name="dr63.bucuresti.rdsnet.ro" type="PTR"/>
+</hostnames>
+<ports><port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="http" product="Apache httpd" version="2.4.38" extrainfo="(Win64) OpenSSL/1.1.1b PHP/7.3.3" method="probed" conf="10"><cpe>cpe:/a:apache:http_server:2.4.38</cpe></service><script id="http-server-header" output="Apache/2.4.38 (Win64) OpenSSL/1.1.1b PHP/7.3.3"><elem>Apache/2.4.38 (Win64) OpenSSL/1.1.1b PHP/7.3.3</elem>
+</script><script id="vulners" output="&#xa;  cpe:/a:apache:http_server:2.4.38: &#xa;&#x9;CVE-2019-0211&#x9;&#x9;7.2&#x9;&#x9;https://vulners.com/cve/CVE-2019-0211&#xa;&#x9;CVE-2019-0215&#x9;&#x9;6.0&#x9;&#x9;https://vulners.com/cve/CVE-2019-0215"><elem key="cpe:/a:apache:http_server:2.4.38">&#xa;&#x9;CVE-2019-0211&#x9;&#x9;7.2&#x9;&#x9;https://vulners.com/cve/CVE-2019-0211&#xa;&#x9;CVE-2019-0215&#x9;&#x9;6.0&#x9;&#x9;https://vulners.com/cve/CVE-2019-0215</elem>
+</script></port>
+<port protocol="tcp" portid="3306"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="mysql" product="MariaDB" extrainfo="unauthorized" method="probed" conf="10"><cpe>cpe:/a:mariadb:mariadb</cpe></service></port>
+<port protocol="tcp" portid="4433"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="http" product="Apache httpd" version="2.4.38" extrainfo="(Win64) OpenSSL/1.1.1b PHP/7.3.3" method="probed" conf="10"><cpe>cpe:/a:apache:http_server:2.4.38</cpe></service><script id="http-server-header" output="Apache/2.4.38 (Win64) OpenSSL/1.1.1b PHP/7.3.3"><elem>Apache/2.4.38 (Win64) OpenSSL/1.1.1b PHP/7.3.3</elem>
+</script><script id="vulners" output="&#xa;  cpe:/a:apache:http_server:2.4.38: &#xa;&#x9;CVE-2019-0211&#x9;&#x9;7.2&#x9;&#x9;https://vulners.com/cve/CVE-2019-0211&#xa;&#x9;CVE-2019-0215&#x9;&#x9;6.0&#x9;&#x9;https://vulners.com/cve/CVE-2019-0215"><elem key="cpe:/a:apache:http_server:2.4.38">&#xa;&#x9;CVE-2019-0211&#x9;&#x9;7.2&#x9;&#x9;https://vulners.com/cve/CVE-2019-0211&#xa;&#x9;CVE-2019-0215&#x9;&#x9;6.0&#x9;&#x9;https://vulners.com/cve/CVE-2019-0215</elem>
+</script></port>
+<port protocol="tcp" portid="5040"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="unknown" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7680"><state state="open" reason="syn-ack" reason_ttl="128"/><service name="pando-pub" method="table" conf="3"/></port>
+<port protocol="udp" portid="137"><state state="open" reason="udp-response" reason_ttl="128"/><service name="netbios-ns" product="Microsoft Windows netbios-ssn" extrainfo="workgroup: WORKGROUP" hostname="LEONARD-PC" ostype="Windows" method="probed" conf="10"><cpe>cpe:/o:microsoft:windows</cpe></service></port>
+</ports>
+<os><portused state="open" proto="tcp" portid="80"/>
+<osmatch name="AVtech Room Alert 26W environmental monitor" accuracy="87" line="9077">
+<osclass type="specialized" vendor="AVtech" osfamily="embedded" accuracy="87"/>
+</osmatch>
+<osmatch name="Microsoft Windows XP SP2" accuracy="87" line="81128">
+<osclass type="general purpose" vendor="Microsoft" osfamily="Windows" osgen="XP" accuracy="87"><cpe>cpe:/o:microsoft:windows_xp::sp2</cpe></osclass>
+</osmatch>
+<osmatch name="FreeBSD 6.2-RELEASE" accuracy="86" line="27364">
+<osclass type="general purpose" vendor="FreeBSD" osfamily="FreeBSD" osgen="6.X" accuracy="86"><cpe>cpe:/o:freebsd:freebsd:6.2</cpe></osclass>
+</osmatch>
+<osmatch name="FreeBSD 10.3-STABLE" accuracy="85" line="26140">
+<osclass type="general purpose" vendor="FreeBSD" osfamily="FreeBSD" osgen="10.X" accuracy="85"><cpe>cpe:/o:freebsd:freebsd:10.3</cpe></osclass>
+</osmatch>
+</os>
+<distance value="1"/>
+<tcpsequence index="258" difficulty="Good luck!" values="51F3A50E,E20B251B,9F25940A,DD967222,971B7C4B,14DFE0FA"/>
+<ipidsequence class="Incremental" values="5F7E,5F7F,5F80,5F81,5F82,5F83"/>
+<tcptssequence class="none returned (unsupported)"/>
+<times srtt="315" rttvar="68" to="100000"/>
+</host>
+<runstats><finished time="1559430265" timestr="Sat Jun  1 19:04:25 2019" elapsed="165.50" summary="Nmap done at Sat Jun  1 19:04:25 2019; 1 IP address (1 host up) scanned in 165.50 seconds" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

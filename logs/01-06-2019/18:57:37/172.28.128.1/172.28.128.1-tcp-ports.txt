@@ -1,0 +1,5 @@
+TCP open	            http[   80]		from 172.28.128.1  ttl 128 
+TCP open	           mysql[ 3306]		from 172.28.128.1  ttl 128 
+TCP open	         unknown[ 4433]		from 172.28.128.1  ttl 128 
+TCP open	         unknown[ 5040]		from 172.28.128.1  ttl 128 
+TCP open	         unknown[ 7680]		from 172.28.128.1  ttl 128 
