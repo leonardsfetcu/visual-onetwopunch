@@ -1,0 +1,2 @@
+UDP open	          sunrpc[  111]		from 172.28.128.4  ttl 64 
+UDP open	      netbios-ns[  137]		from 172.28.128.4  ttl 64 

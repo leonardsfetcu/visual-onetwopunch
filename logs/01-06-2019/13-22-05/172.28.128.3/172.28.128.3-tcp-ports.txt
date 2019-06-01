@@ -1,0 +1,44 @@
+TCP open	             ftp[   21]		from 172.28.128.3  ttl 128 
+TCP open	             ssh[   22]		from 172.28.128.3  ttl 128 
+TCP open	            http[   80]		from 172.28.128.3  ttl 128 
+TCP open	           epmap[  135]		from 172.28.128.3  ttl 128 
+TCP open	     netbios-ssn[  139]		from 172.28.128.3  ttl 128 
+TCP open	    microsoft-ds[  445]		from 172.28.128.3  ttl 128 
+TCP open	    nimrod-agent[ 1617]		from 172.28.128.3  ttl 128 
+TCP open	           mysql[ 3306]		from 172.28.128.3  ttl 128 
+TCP open	   ms-wbt-server[ 3389]		from 172.28.128.3  ttl 128 
+TCP open	      lrs-paging[ 3700]		from 172.28.128.3  ttl 128 
+TCP open	    appserv-http[ 4848]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 5985]		from 172.28.128.3  ttl 128 
+TCP open	      imqbrokerd[ 7676]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8009]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8019]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8020]		from 172.28.128.3  ttl 128 
+TCP open	       oa-system[ 8022]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8027]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8028]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8031]		from 172.28.128.3  ttl 128 
+TCP open	          pro-ed[ 8032]		from 172.28.128.3  ttl 128 
+TCP open	        http-alt[ 8080]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8181]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8282]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8383]		from 172.28.128.3  ttl 128 
+TCP open	    pcsync-https[ 8443]		from 172.28.128.3  ttl 128 
+TCP open	     pcsync-http[ 8444]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8484]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8585]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 8686]		from 172.28.128.3  ttl 128 
+TCP open	         wap-wsp[ 9200]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[ 9300]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[47001]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49152]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49153]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49154]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49155]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49156]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49165]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49169]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49209]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49246]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49268]		from 172.28.128.3  ttl 128 
+TCP open	         unknown[49269]		from 172.28.128.3  ttl 128 
