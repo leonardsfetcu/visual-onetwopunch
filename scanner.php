@@ -229,7 +229,7 @@ function array_get_range($array, $min, $max) {
 				    				{
 				    					echo '<button class="btn-custom" id="replay-'.$scannerRow['id_scanner'].'"><i class="fas fa-redo-alt"></i></button></a>';
 				    				}
-									echo '<button class="btn-custom del" id="pdf-'.$scannerRow['id_scanner'].'"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete-'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><button class="btn-custom" id="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></td>';
+									echo '<button class="btn-custom del" id="pdf-'.$scannerRow['id_scanner'].'"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete-'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></form></td>';
 								}
 
 			    			}

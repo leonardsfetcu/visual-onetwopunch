@@ -1,3 +1,42 @@
+<?php
+	require_once("db.php");
+	$conn = OpenConnection();
+	CheckConnection($conn);
+	if(isset($_GET['submit']))
+	{
+		$parameters = explode("-",$_GET['submit']);
+		if(is_numeric($parameters[1]))
+		{
+			$sql = 'select `scanners`.`name`,`scanners`.`start`,`scanners`.`end`,`scanners`.`target`,COUNT(`hosts`.`id_host`) as `num_hosts` from `scanners` INNER JOIN `hosts` on `scanners`.`id_scanner`=`hosts`.`id_scanner` WHERE `scanners`.`id_scanner`="'.$parameters[1].'"';
+			$result = $conn->query($sql);
+			if($result->num_rows == 1)
+			{
+				$row = $result->fetch_assoc();
+				$scanName = $row['name'];
+				$start = $row['start'];
+				$end = $row['end'];
+				$target = $row['target'];
+				$num_hosts = $row['num_hosts'];
+			}
+
+			$sql = 'SELECT hosts.* from hosts INNER JOIN scanners on hosts.id_scanner=scanners.id_scanner WHERE scanners.id_scanner='.$parameters[1];
+			$result = $conn->query($sql);
+			if($result->num_rows>0)
+			{
+				$hosts = $result->fetch_all(MYSQLI_ASSOC);
+			}
+		}
+		else
+		{
+			exit();
+		}
+	}
+	else
+	{
+		exit();
+	}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,354 +72,66 @@
 	<div class="row">
 		<div class="col-md bg-info text-white p-4">
 			<h1>Scan Report</h1>
-			<h3>WiFiMotoc Network scanner</h3>
-			<h5>Sat May 25 06:59:56 2019 – Sat May 25 07:05:04 2019</h5>
-			<h5>100 hosts scanned. 3 hosts up. 97 hosts down. </h5>
+			<h3><?php echo $scanName; ?></h3>
+			<h5><?php echo $start." - ".$end; ?></h5>
+			<h5><?php echo $num_hosts." host(s) up."; ?></h5>
 		</div>
 	</div>
 	<div class="row p-4">
 		<h4>Online Hosts</h4>
 	</div>
-	<div class="row">
-		<div class="col-md mt-1">
-			<div id="accordion">
-			    <div class="card">
-			    	<a class="card-link" data-toggle="collapse" href="#collapse1">
-				        <div class="card-header">
-					        10.10.2.5
-				      	</div>
-			      	</a>
-			      	<div id="collapse1" class="collapse" data-parent="#accordion">  <!--Port 	Protocol 	State
-Reason 	Service 	Product 	Version 	Extra Info -->
-			        	<div class="card-body">
-			          		<div class="table-responsive">
-							    <table class="table table-bordered">
-							    	<thead>
-								        <tr style="background-color: rgb(200,200,200);">
-									        <th>Port</th>
-									        <th>Protocol</th>
-									        <th>State</th>
-									        <th>Reason</th>
-									        <th>Service</th>
-									        <th>Product</th>
-									        <th>Version</th>
-									        <th>Extra Info</th>
-								        </tr>
-							      	</thead>
-							      	<tbody>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>21</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>ftp</td>
-								          <td>Microsoft ftpd</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8">
-								        		<div class="container">
-								        			<h4>Vulnerabilities found</h4>
-								        			<table class="table table-bordered">
-												    	<thead>
-													        <tr style="background-color: rgb(200,200,200);">
-														        <th>CVE</th>
-														        <th>Score</th>
-														        <th>Link</th>
-													        </tr>
-												      	</thead>
-												      	<tbody>
-													        <tr>
-													          <td>CVE-2016-8858</td>
-													          <td>7.8</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2016-8858">
-														          		https://vulners.com/cve/CVE-2016-8858
-														        </a>
-													          </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2016-1908</td>
-													          <td>7.5</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2016-1908">
-														          		https://vulners.com/cve/CVE-2016-1908
-														        </a>
-													          </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2016-1907</td>
-													          <td>5.0</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2016-1907">
-														          		https://vulners.com/cve/CVE-2016-1907
-														        </a>
-													          </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2016-10708</td>
-													          <td>5.0</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2016-10708">
-														          		https://vulners.com/cve/CVE-2016-10708
-														        </a>
-													          </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2018-15919</td>
-													          <td>5.0</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2018-15919">
-														          		https://vulners.com/cve/CVE-2018-15919
-														        </a>
-													      	  </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2016-0778</td>
-													          <td>4.6</td>
-													          <td>
-													          	<a href="https://vulners.com/cve/CVE-2016-0778">
-														          		https://vulners.com/cve/CVE-2016-0778
-														        </a>
-													      	  </td>
-													        </tr>
-													        <tr>
-													          <td>CVE-2016-0777</td>
-													          <td>4.0</td>
-													          <td>
-														          	<a href="https://vulners.com/cve/CVE-2016-0777">
-														          		https://vulners.com/cve/CVE-2016-0777
-														          	</a>
-													          </td>
-													        </tr>
-													    </tbody>
-													</table>
-								        		</div>
-								        	</td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>22</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>ssh</td>
-								          <td>OpenSSH</td>
-								          <td>7.1</td>
-								          <td>protocol 2.0</td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>80</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>http</td>
-								          <td>Microsoft IIS httpd</td>
-								          <td>7.5</td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>135</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>netbios-ssn</td>
-								          <td>Microsoft Windows netbios-ssn</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>445</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>microsoft-ds</td>
-								          <td>Microsoft Windows Server 2008 R2 - 2012 microsoft-ds</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>1617</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>rmiregistry</td>
-								          <td>Java RMI</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>3306</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>mysql</td>
-								          <td>MySQL</td>
-								          <td>5.5.20-log</td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>3389</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>ms-wbt-server</td>
-								          <td>Microsoft Terminal Service</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>3700</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>giop</td>
-								          <td>CORBA naming service</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>4848</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>appserv-http</td>
-								          <td> </td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>5985</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>http</td>
-								          <td>Microsoft HTTPAPI httpd</td>
-								          <td>2.0</td>
-								          <td>SSDP/UPnP</td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>7676</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>java-message-service</td>
-								          <td>Java Message Service</td>
-								          <td>301</td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>8009</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>ajp13</td>
-								          <td>Apache Jserv</td>
-								          <td> </td>
-								          <td>Protocol v1.3</td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8"></td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>8019</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>qbdb</td>
-								          <td> </td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-								        <tr>
-								        	<td colspan="8">
+	
+			    <?php
+			    	foreach ($hosts as $host) 
+			    	{	
+			    		echo '<div class="row"><div class="col-md mt-1"><div id="accordion"><div class="card">';
+			    		echo '<a class="card-link" data-toggle="collapse" href="#collapse'.$host['id_host'].'">';
+			    		echo '<div class="card-header">';
+			    		echo $host['IP'];
+			    		echo '</div>';
+			    		echo '<div id="collapse'.$host['id_host'].'" class="collapse" data-parent="#accordion">';
+			    		echo '<div class="card-body"><div class="table-responsive"><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>Port</th><th>Protocol</th><th>State</th><th>Reason</th><th>Service</th><th>Product</th><th>Version</th><th>Extra Info</th></tr></thead><tbody>';
 
-								        	</td>
-								        </tr>
-								        <tr style="background-color: rgb(223,240,216)">
-								          <td>8020</td>
-								          <td>tcp</td>
-								          <td>open</td>
-								          <td>syn-ack</td>
-								          <td>http</td>
-								          <td>Apache httpd</td>
-								          <td> </td>
-								          <td> </td>
-								        </tr>
-							      	</tbody>
-							    </table>
-							</div>
-			        	</div>
-			    	</div>
-			    </div>
-			</div>
-		</div>
-	</div>	
-	<div class="row">
-		<div class="col-md mt-1">
-			<div id="accordion">
-			    <div class="card">
-			    	<a class="card-link" data-toggle="collapse" href="#collapse2">
-				        <div class="card-header">
-					        10.10.2.23
-				      	</div>
-			      	</a>
-			      	<div id="collapse2" class="collapse" data-parent="#accordion">
-			        	<div class="card-body">
-			          		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			        	</div>
-			    	</div>
-			    </div>
-			</div>
-		</div>
-	</div>	
-	<div class="row">
-		<div class="col-md mt-1">
-			<div id="accordion">
-			    <div class="card">
-			        <a class="card-link" data-toggle="collapse" href="#collapse3">
-				        <div class="card-header">
-					        10.10.2.100
-				      	</div>
-			      	</a>
-			      	<div id="collapse3" class="collapse" data-parent="#accordion">
-			        	<div class="card-body">
-			          		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			        	</div>
-			    	</div>
+			    		$sql = 'SELECT ports.* from ports where ports.id_host='.$host['id_host'];
+			    		$result = $conn->query($sql);
+			    		
+			    		if($result->num_rows>0)
+			    		{
+			    			$ports = $result->fetch_all(MYSQLI_ASSOC);
+			    			foreach ($ports as $port) {
+			    				echo '<tr style="background-color: rgb(223,240,216)">';
+			    				echo '<td>'.$port['port_number'].'</td>';
+			    				echo '<td>'.$port['protocol'].'</td>';
+			    				echo '<td>'.$port['state'].'</td>';
+			    				echo '<td>'.$port['reason'].'</td>';
+			    				echo '<td>'.$port['service'].'</td>';
+			    				echo '<td>'.$port['product'].'</td>';
+			    				echo '<td>'.$port['version'].'</td>';
+			    				echo '<td>'.$port['extra'].'</td></tr>';
+			    				
+
+
+			    				$sql = "select vulnerabilities.* from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities.id_cve=vulnerabilities_list.id_cve INNER JOIN ports on ports.id_port=vulnerabilities_list.id_port WHERE ports.id_port=".$port['id_port'];
+			    				$result=$conn->query($sql);
+			    				if($result->num_rows>0)
+			    				{
+			    					echo '<tr><td colspan="8"><div class="container"><h4>Vulnerabilities found</h4><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>CVE</th><th>Score</th><th>Link</th></tr></thead><tbody>';
+			    					$vulnerabilities = $result->fetch_all(MYSQLI_ASSOC);
+			    					foreach ($vulnerabilities as $vulnerability) {
+			    						echo '<tr>';
+			    						echo '<td>'.$vulnerability['id_cve'].'</td>';
+			    						echo '<td>'.$vulnerability['score'].'</td>';
+			    						echo '<td>'.$vulnerability['description'].'</td></tr>';
+			    					}
+			    					echo '</tbody></table></div></td></tr>';
+			    				}
+			    				
+			    			}
+			    		}
+
+			    		echo '</tbody></table></div></div></div></div></div></div></div>';
+			    	}
+			    ?>	
 			    </div>
 			</div>
 		</div>
