@@ -1,3 +1,17 @@
+<?php
+require_once('db.php');
+$processing = '<td style="padding-left: 20px"><div class="spinner-border text-muted"></div></td>';
+$finished = '<td class="px-4"><i class="far fa-check-circle fa-lg" style="color:green;"></i></td>';
+$ready = '<td class="px-4"><i class="far fa-question-circle fa-lg" style="color: gray;"></i></td>';
+
+function array_get_range($array, $min, $max) {
+    return array_filter($array, function($element) use ($min, $max) {
+       return $element['score'] >= $min && $element['score'] <= $max; 
+    });
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,7 +125,7 @@
 					</div>
 				</div>
 				<div class="row px-4">
-					<button type="button" class="btn btn-primary btn-block">Submit</button>
+					<button onclick="alert('dada');" type="button" class="btn btn-primary btn-block">Submit</button>
 				</div>
 		</div>
 	</div>
@@ -136,200 +150,70 @@
 				    </tr>
 			    </thead>
 			    <tbody>
-					<tr class="clickable-row" data-href="reports.php">
-						<td style="padding-left: 20px">
-							<div class="spinner-border text-muted"></div>
-						</td>
-						<td>
-							Metasploitable3 - Ubuntu Server scanner
-						</td>
-						<td>172.128.28.5</td>
-						<td>10/05/2019 22:09:15</td>
-						<td>
-							<div class="progress border">
-								<div class="progress-bar bg-primary" style="width:40%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:25%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr class="clickable-row" data-href="reports.php">
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>Metasploitable3 - Windows 2008 Server R2 scanner</td>
-						<td>192.168.0.100</td>
-						<td>11/04/2019 12:29:05</td>
-						<td>
-							<div class="progress border">
-							   <div class="progress-bar bg-primary" style="width:34%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:28%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>Metasploitable2 - Linux scanner</td>
-						<td>172.128.28.5</td>
-						<td>19/04/2019 15:43:07</td>
-						<td>
-							<div class="progress border">
-							    <div class="progress-bar bg-primary" style="width:4%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:65%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:21%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red;margin-left: 10px;"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>WiFiMotoc Network scanner</td>
-						<td>10.10.2.1-100</td>
-						<td>21/04/2019 09:29:05</td>
-						<td>
-							<div class="progress border">
-							    <div class="progress-bar bg-primary" style="width:40%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:25%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>DVL scanner</td>
-						<td>172.128.28.5</td>
-						<td>21/04/2019 12:36:55</td>
-						<td>
-							<div class="progress border">
-								<div class="progress-bar bg-primary" style="width:40%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:25%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>Kioptrix Lvl 2 scanner</td>
-						<td>192.168.0.100</td>
-						<td>23/04/2019 16:55:05</td>
-						<td>
-							<div class="progress border">
-							   <div class="progress-bar bg-primary" style="width:34%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:28%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>Kioptrix Lvl 1 scanner</td>
-						<td>172.128.28.5</td>
-						<td>30/04/2019 00:00:05</td>
-						<td>
-							<div class="progress border">
-							    <div class="progress-bar bg-primary" style="width:4%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:65%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:21%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
-					<tr>
-						<td class="px-4">
-							<i class="far fa-check-circle fa-lg" style="color:green;"></i>
-						</td>
-						<td>WiFiStudenti Network scanner</td>
-						<td>10.10.2.1-255</td>
-						<td>05/05/2019 12:29:05</td>
-						<td>
-							<div class="progress border">
-							    <div class="progress-bar bg-primary" style="width:40%">
-							    </div>
-							    <div class="progress-bar bg-success" style="width:25%">
-							    </div>
-							    <div class="progress-bar bg-warning" style="width:10%">
-							    </div>
-							    <div class="progress-bar bg-danger" style="width:5%">
-							    </div>
-  							</div>
-						</td>
-						<td>
-							<i class="fas fa-redo-alt fa-lg"></i>
-							<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-						</td>
-					</tr>
+			    	<?php
+			    		$sql = "select * from scanners";
+			    		$scannerResult = $conn->query($sql);
+			    		if($scannerResult->num_rows>0)
+			    		{
+			    			while($scannerRow = $scannerResult->fetch_assoc())
+			    			{
+			    				echo '<tr class="clickable-row" data-href="reports.php">';
+
+			    				if($scannerRow['state'] == "READY")
+			    				{
+			    					echo $ready;
+			    				}
+			    				if($scannerRow['state'] == "PROCESSING")
+			    				{
+			    					echo $processing;
+			    				}
+			    				if($scannerRow['state'] == "FINISHED")
+			    				{
+			    					echo $finished;
+			    				}
+
+								echo '<td>'.$scannerRow['name'].'</td><td>'.$scannerRow['target'].'</td><td>'.$scannerRow['end'].'</td>';
+
+								$vulnResult = $conn->query("select vulnerabilities.score from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities_list.id_cve=vulnerabilities.id_cve INNER JOIN ports on vulnerabilities_list.id_port=ports.id_port INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner where scanners.id_scanner=".$scannerRow['id_scanner']);
+
+								if($vulnResult->num_rows>0)
+								{
+									$vulnRows = $vulnResult->fetch_all(MYSQLI_ASSOC);
+
+									$numLow = count(array_get_range($vulnRows,0,3));
+									$numMedium = count(array_get_range($vulnRows,3,5));
+									$numHigh = count(array_get_range($vulnRows,5,8));
+									$numCritical = count(array_get_range($vulnRows,8,10));
+
+									$numVuln = $numLow + $numMedium + $numHigh + $numCritical;
+									$widthLow = $numLow/$numVuln*100;
+									$widthMedium = $numMedium/$numVuln*100;
+									$widthHigh = $numHigh/$numVuln*100;
+									$widthCritical = $numCritical/$numVuln*100;
+
+									echo '<td>
+											<div class="progress border">
+											   <div class="progress-bar bg-primary" style="width:'.$widthLow.'%">
+											    </div>
+											    <div class="progress-bar bg-success" style="width:'.$widthMedium.'%">
+											    </div>
+											    <div class="progress-bar bg-warning" style="width:'.$widthHigh.'%">
+											    </div>
+											    <div class="progress-bar bg-danger" style="width:'.$widthCritical.'%">
+											    </div>
+				  							</div>
+										</td>';
+									echo '<td>
+											<i class="fas fa-redo-alt fa-lg"></i>
+											<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
+										</td>'	;
+								}
+
+			    			}
+			    		}
+
+			    		CloseConnection($conn);
+			    	?>
 			    </tbody>
 		    </table>
 		</div>
