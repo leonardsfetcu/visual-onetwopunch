@@ -1,5 +1,10 @@
 <?php
 require_once('db.php');
+
+$conn = OpenConnection();
+
+CheckConnection($conn);
+
 $processing = '<td style="padding-left: 20px"><div class="spinner-border text-muted"></div></td>';
 $finished = '<td class="px-4"><i class="far fa-check-circle fa-lg" style="color:green;"></i></td>';
 $ready = '<td class="px-4"><i class="far fa-question-circle fa-lg" style="color: gray;"></i></td>';
@@ -10,6 +15,8 @@ function array_get_range($array, $min, $max) {
     });
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -18,14 +25,32 @@ function array_get_range($array, $min, $max) {
     <meta charset="utf-8">
     <title>Visual OTP - Scanner</title>  
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script type="text/javascript" src="lineChart.js"></script>
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">    
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
+<style>
+.btn-custom {
+  background-color: white;
+  border: 2px solid DodgerBlue;
+  border-radius: 5px;
+  color: black;
+  padding: 5px 8px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+
+/* Darker background on mouse-over */
+.btn-custom:hover {
+  background-color: DodgerBlue;
+  color: white;
+}
+.del:hover {
+	background-color: DodgerBlue;
+	color: red;
+}
+</style>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
 	<h5 class="navbar-brand">Visual OTP</h5>
@@ -125,7 +150,7 @@ function array_get_range($array, $min, $max) {
 					</div>
 				</div>
 				<div class="row px-4">
-					<button onclick="alert('dada');" type="button" class="btn btn-primary btn-block">Submit</button>
+					<button id="submitBtn" type="button" class="btn btn-primary btn-block">Submit</button>
 				</div>
 		</div>
 	</div>
@@ -137,16 +162,16 @@ function array_get_range($array, $min, $max) {
 		</div>
 	</div>	
 	<div class="row">
-		<div class="col-md">
-			<table class="table table-hover table-responsive">
+		<div class="table-responsive">
+			<table class="table table-hover">
 			    <thead class="thead-dark">
 				    <tr>
-				    	<th>Status</th>
-					    <th>Scanner</th>
-					    <th>Target</th>
-					    <th>Last scan</th>
-					    <th class="w-50">Vulnerabilities</th>
-					    <th align="center">Actions</th>
+				    	<th style="width: 2%">Status</th>
+					    <th style="width: 15%">Scanner</th>
+					    <th style="width: 8%">Target</th>
+					    <th style="width: 15%">Last scan</th>
+					    <th style="width: 43%">Vulnerabilities</th>
+					    <th style="width: 17%">Actions</th>
 				    </tr>
 			    </thead>
 			    <tbody>
@@ -191,22 +216,20 @@ function array_get_range($array, $min, $max) {
 									$widthHigh = $numHigh/$numVuln*100;
 									$widthCritical = $numCritical/$numVuln*100;
 
-									echo '<td>
-											<div class="progress border">
-											   <div class="progress-bar bg-primary" style="width:'.$widthLow.'%">
-											    </div>
-											    <div class="progress-bar bg-success" style="width:'.$widthMedium.'%">
-											    </div>
-											    <div class="progress-bar bg-warning" style="width:'.$widthHigh.'%">
-											    </div>
-											    <div class="progress-bar bg-danger" style="width:'.$widthCritical.'%">
-											    </div>
-				  							</div>
-										</td>';
-									echo '<td>
-											<i class="fas fa-redo-alt fa-lg"></i>
-											<i class="fas fa-trash-alt fa-lg" style="color: red; margin-left: 10px"></i>
-										</td>'	;
+									echo '<td><div class="progress border"><div class="progress-bar bg-primary" style="width:'.$widthLow.'%"></div><div class="progress-bar bg-success" style="width:'.$widthMedium.'%"></div><div class="progress-bar bg-warning" style="width:'.$widthHigh.'%"></div><div class="progress-bar bg-danger" style="width:'.$widthCritical.'%"></div></div></td><td class="actions">';
+									if($scannerRow['state'] == "READY")
+									{
+										echo '<button class="btn-custom" id="play-'.$scannerRow['id_scanner'].'"><i class="fas fa-play"></i></button></a>';
+									}
+				    				if($scannerRow['state'] == "PROCESSING")
+				    				{
+				    					echo '<button class="btn-custom" id="pause-'.$scannerRow['id_scanner'].'"><i class="fas fa-pause"></i></button>';
+				    				}
+				    				if($scannerRow['state'] == "FINISHED")
+				    				{
+				    					echo '<button class="btn-custom" id="replay-'.$scannerRow['id_scanner'].'"><i class="fas fa-redo-alt"></i></button></a>';
+				    				}
+									echo '<button class="btn-custom del" id="pdf-'.$scannerRow['id_scanner'].'"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete-'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><button class="btn-custom" id="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></td>';
 								}
 
 			    			}
@@ -219,12 +242,8 @@ function array_get_range($array, $min, $max) {
 		</div>
 	</div>		   
 </div>
-<script type="text/javascript">
-	jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-});
-</script>
+<script src="js/jquery/jquery-3.4.1.min.js"></script>
+<script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="js/scanners.js"></script>
 </body>
 </html>
