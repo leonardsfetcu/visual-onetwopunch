@@ -18,13 +18,6 @@
 				$target = $row['target'];
 				$num_hosts = $row['num_hosts'];
 			}
-
-			$sql = 'SELECT hosts.* from hosts INNER JOIN scanners on hosts.id_scanner=scanners.id_scanner WHERE scanners.id_scanner='.$parameters[1];
-			$result = $conn->query($sql);
-			if($result->num_rows>0)
-			{
-				$hosts = $result->fetch_all(MYSQLI_ASSOC);
-			}
 		}
 		else
 		{
@@ -82,53 +75,42 @@
 	</div>
 	
 			    <?php
+
+					$sql = 'SELECT hosts.* from hosts INNER JOIN scanners on hosts.id_scanner=scanners.id_scanner WHERE scanners.id_scanner='.$parameters[1];
+					$result = $conn->query($sql);
+					if($result->num_rows>0)
+					{
+						$hosts = $result->fetch_all(MYSQLI_ASSOC);
+					}
 			    	foreach ($hosts as $host) 
 			    	{	
-			    		echo '<div class="row"><div class="col-md mt-1"><div id="accordion"><div class="card">';
-			    		echo '<a class="card-link" data-toggle="collapse" href="#collapse'.$host['id_host'].'">';
-			    		echo '<div class="card-header">';
-			    		echo $host['IP'];
-			    		echo '</div>';
-			    		echo '<div id="collapse'.$host['id_host'].'" class="collapse" data-parent="#accordion">';
-			    		echo '<div class="card-body"><div class="table-responsive"><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>Port</th><th>Protocol</th><th>State</th><th>Reason</th><th>Service</th><th>Product</th><th>Version</th><th>Extra Info</th></tr></thead><tbody>';
 
+			    		echo '<div class="row"><div class="col-md mt-1"><div id="accordion'.$host['id_host'].'"><div class="card"><a class="card-link" data-toggle="collapse" href="#collapse'.$host['id_host'].'"><div class="card-header">'.$host['IP'].'</div></a><div id="collapse'.$host['id_host'].'" class="collapse" data-parent="#accordion'.$host['id_host'].'"><div class="card-body"><div class="table-responsive"><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>Port</th><th>Protocol</th><th>State</th><th>Reason</th><th>Service</th><th>Product</th><th>Version</th><th>Extra Info</th></tr></thead><tbody>';
 			    		$sql = 'SELECT ports.* from ports where ports.id_host='.$host['id_host'];
 			    		$result = $conn->query($sql);
-			    		
 			    		if($result->num_rows>0)
 			    		{
+
 			    			$ports = $result->fetch_all(MYSQLI_ASSOC);
-			    			foreach ($ports as $port) {
-			    				echo '<tr style="background-color: rgb(223,240,216)">';
-			    				echo '<td>'.$port['port_number'].'</td>';
-			    				echo '<td>'.$port['protocol'].'</td>';
-			    				echo '<td>'.$port['state'].'</td>';
-			    				echo '<td>'.$port['reason'].'</td>';
-			    				echo '<td>'.$port['service'].'</td>';
-			    				echo '<td>'.$port['product'].'</td>';
-			    				echo '<td>'.$port['version'].'</td>';
-			    				echo '<td>'.$port['extra'].'</td></tr>';
-			    				
+			    			foreach ($ports as $port) 
+			    			{
 
-
+			    				echo '<tr style="background-color: rgb(223,240,216)"><td>'.$port['port_number'].'</td><td>'.$port['protocol'].'</td><td>'.$port['state'].'</td><td>'.$port['reason'].'</td><td>'.$port['service'].'</td><td>'.$port['product'].'</td><td>'.$port['version'].'</td><td>'.$port['extra'].'</td></tr>';
+								
 			    				$sql = "select vulnerabilities.* from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities.id_cve=vulnerabilities_list.id_cve INNER JOIN ports on ports.id_port=vulnerabilities_list.id_port WHERE ports.id_port=".$port['id_port'];
 			    				$result=$conn->query($sql);
 			    				if($result->num_rows>0)
 			    				{
-			    					echo '<tr><td colspan="8"><div class="container"><h4>Vulnerabilities found</h4><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>CVE</th><th>Score</th><th>Link</th></tr></thead><tbody>';
+			    					echo '<tr><td colspan="8"><div class="container"><h4>Vulnerabilities found</h4><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>CVE</th><th>Score</th><th>Description</th></tr></thead><tbody>';
+
 			    					$vulnerabilities = $result->fetch_all(MYSQLI_ASSOC);
 			    					foreach ($vulnerabilities as $vulnerability) {
-			    						echo '<tr>';
-			    						echo '<td>'.$vulnerability['id_cve'].'</td>';
-			    						echo '<td>'.$vulnerability['score'].'</td>';
-			    						echo '<td>'.$vulnerability['description'].'</td></tr>';
+			  							echo '<tr><td>'.$vulnerability['id_cve'].'</td><td>'.$vulnerability['score'].'</td><td>'.$vulnerability['description'].'</td></tr>';
 			    					}
 			    					echo '</tbody></table></div></td></tr>';
 			    				}
-			    				
 			    			}
 			    		}
-
 			    		echo '</tbody></table></div></div></div></div></div></div></div>';
 			    	}
 			    ?>	
