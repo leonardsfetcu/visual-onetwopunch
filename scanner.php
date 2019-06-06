@@ -5,9 +5,9 @@ $conn = OpenConnection();
 
 CheckConnection($conn);
 
-$processing = '<td style="padding-left: 20px"><div class="spinner-border text-muted"></div></td>';
-$finished = '<td class="px-4"><i class="far fa-check-circle fa-lg" style="color:green;"></i></td>';
-$ready = '<td class="px-4"><i class="far fa-question-circle fa-lg" style="color: gray;"></i></td>';
+$processing = '<td id="state" value"PROCESSING" style="padding-left: 20px"><div class="spinner-border text-muted"></div></td>';
+$finished = '<td id="state" value="FINISHED" class="px-4"><i class="far fa-check-circle fa-lg" style="color:green;"></i></td>';
+$ready = '<td id="state" value="READY" class="px-4"><i class="far fa-question-circle fa-lg" style="color: gray;"></i></td>';
 
 function array_get_range($array, $min, $max) {
     return array_filter($array, function($element) use ($min, $max) {
@@ -83,30 +83,30 @@ function array_get_range($array, $min, $max) {
 			  	<div class="row">
 					<div class="col-md px-4 py-2">
 						<label for="usr">Scanner name</label>
-						<input type="text" class="form-control" id="usr">
+						<input type="text" class="form-control" id="name">
 					</div>
 				</div>
 			  	<div class="row">
 					<div class="col-md px-4 py-2">
 						<label for="usr">Target IP/network:</label>
-						<input type="text" class="form-control" id="usr">
+						<input type="text" class="form-control" id="target">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md px-4 py-2">
 						<label for="methods">Select TCP Scanning Technique</label>
 					    <select name="cars" class="custom-select" id="methods">
-					      <option value="volvo">TCP SYN scan</option>
-					      <option value="fiat">TCP connect scan</option>
-					      <option value="audi">SCTP INIT scan</option>
-						      <option selected>TCP NULL scan</option>
-					      <option value="volvo">TCP FIN scan</option>
-					      <option value="fiat">TCP Xmas scan</option>
-					      <option value="audi">TCP ACK scan</option>
-						      <option value="volvo">TCP Window scan</option>
-					      <option value="fiat">TCP Maimon scan</option>
-					      <option value="fiat">IP Protocol scan</option>
-					      <option value="audi">Custom TCP scan</option>
+					      <option value="sS">TCP SYN scan</option>
+					      <option value="sT">TCP connect scan</option>
+					      <option value="sY">SCTP INIT scan</option>
+						  <option value="sN">TCP NULL scan</option>
+					      <option value="sF">TCP FIN scan</option>
+					      <option value="sX">TCP Xmas scan</option>
+					      <option value="sA">TCP ACK scan</option>
+						  <option value="sW">TCP Window scan</option>
+					      <option value="sM">TCP Maimon scan</option>
+					      <option value="sO">IP Protocol scan</option>
+					      <option value="custom">Custom TCP scan</option>
 					    </select>
 					</div>
 					<div class="col-md">
@@ -144,8 +144,8 @@ function array_get_range($array, $min, $max) {
 				<div class="row">
 					<div class="col-md px-4 py-2">
 						<div class="custom-control custom-switch custom-control-inline">
-						    <input type="checkbox" class="custom-control-input" id="switch1">
-						    <label class="custom-control-label" for="switch1">Enable UDP Scanning</label>
+						    <input type="checkbox" class="custom-control-input" id="switchUdp">
+						    <label class="custom-control-label" for="switchUdp">Enable UDP Scanning</label>
 					  	</div>
 					</div>
 				</div>
@@ -176,13 +176,13 @@ function array_get_range($array, $min, $max) {
 			    </thead>
 			    <tbody>
 			    	<?php
-			    		$sql = "select * from scanners";
+			    		$sql = "select * from scanners order by scanners.id_scanner DESC";
 			    		$scannerResult = $conn->query($sql);
 			    		if($scannerResult->num_rows>0)
 			    		{
 			    			while($scannerRow = $scannerResult->fetch_assoc())
 			    			{
-			    				echo '<tr class="clickable-row" data-href="reports.php">';
+			    				echo '<tr id="row" value="'.$scannerRow['id_scanner'].'">';
 
 			    				if($scannerRow['state'] == "READY")
 			    				{
@@ -197,9 +197,12 @@ function array_get_range($array, $min, $max) {
 			    					echo $finished;
 			    				}
 
-								echo '<td>'.$scannerRow['name'].'</td><td>'.$scannerRow['target'].'</td><td>'.$scannerRow['end'].'</td>';
+								echo '<td id="name">'.$scannerRow['name'].'</td><td id="target">'.$scannerRow['target'].'</td><td id="end">'.$scannerRow['end'].'</td>';
 
 								$vulnResult = $conn->query("select vulnerabilities.score from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities_list.id_cve=vulnerabilities.id_cve INNER JOIN ports on vulnerabilities_list.id_port=ports.id_port INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner where scanners.id_scanner=".$scannerRow['id_scanner']);
+
+								$widthLow=$widthMedium=$widthHigh=$widthCritical=0;
+								
 
 								if($vulnResult->num_rows>0)
 								{
@@ -215,23 +218,22 @@ function array_get_range($array, $min, $max) {
 									$widthMedium = $numMedium/$numVuln*100;
 									$widthHigh = $numHigh/$numVuln*100;
 									$widthCritical = $numCritical/$numVuln*100;
-
-									echo '<td><div class="progress border"><div class="progress-bar bg-primary" style="width:'.$widthLow.'%"></div><div class="progress-bar bg-success" style="width:'.$widthMedium.'%"></div><div class="progress-bar bg-warning" style="width:'.$widthHigh.'%"></div><div class="progress-bar bg-danger" style="width:'.$widthCritical.'%"></div></div></td><td class="actions">';
+								}
+								echo '<td id="vulnerabilities"><div class="progress border"><div class="progress-bar bg-primary" style="width:'.$widthLow.'%"></div><div class="progress-bar bg-success" style="width:'.$widthMedium.'%"></div><div class="progress-bar bg-warning" style="width:'.$widthHigh.'%"></div><div class="progress-bar bg-danger" style="width:'.$widthCritical.'%"></div></div></td>';
+								echo '<td class="actions">';
 									if($scannerRow['state'] == "READY")
 									{
-										echo '<button class="btn-custom" id="play-'.$scannerRow['id_scanner'].'"><i class="fas fa-play"></i></button></a>';
+										echo '<div id="btn-action" style="display:inline;"><button class="btn-custom" id="play"><i class="fas fa-play"></i></button></div>';
 									}
 				    				if($scannerRow['state'] == "PROCESSING")
 				    				{
-				    					echo '<button class="btn-custom" id="pause-'.$scannerRow['id_scanner'].'"><i class="fas fa-pause"></i></button>';
+				    					echo '<div id="btn-action" style="display:inline;"><button class="btn-custom" id="stop"><i class="fas fa-stop"></i></button></div>';
 				    				}
 				    				if($scannerRow['state'] == "FINISHED")
 				    				{
-				    					echo '<button class="btn-custom" id="replay-'.$scannerRow['id_scanner'].'"><i class="fas fa-redo-alt"></i></button></a>';
+				    					echo '<div id="btn-action" style="display:inline;"><button class="btn-custom" id="replay"><i class="fas fa-redo-alt"></i></button></div>';
 				    				}
-									echo '<button class="btn-custom del" id="pdf-'.$scannerRow['id_scanner'].'"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete-'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></form></td>';
-								}
-
+									echo '<button class="btn-custom del" id="pdf"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view"><i class="fas fa-eye"></i></button></form></td>';
 			    			}
 			    		}
 
