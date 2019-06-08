@@ -40,6 +40,20 @@
     <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script type="text/javascript" src="lineChart.js"></script>
 </head>
+<style>
+code {
+	padding-left: 20px;
+	margin: 0;
+}
+hr {
+	margin: 0;
+	padding: 0;
+}
+.card-link:hover {
+	background-color: rgb(121, 169, 247);
+	color: white;
+}
+</style>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <h5 class="navbar-brand" href="#">Visual OTP</h5>
@@ -84,7 +98,7 @@
 					
 			    		foreach ($hosts as $host) 
 			    		{	
-				    		echo '<div class="row"><div class="col-md mt-1"><div id="accordion'.$host['id_host'].'"><div class="card"><a class="card-link" data-toggle="collapse" href="#collapse'.$host['id_host'].'"><div class="card-header">'.$host['IP'].'</div></a><div id="collapse'.$host['id_host'].'" class="collapse" data-parent="#accordion'.$host['id_host'].'"><div class="card-body"><div class="table-responsive"><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>Port</th><th>Protocol</th><th>State</th><th>Reason</th><th>Service</th><th>Product</th><th>Version</th><th>Extra Info</th></tr></thead><tbody>';
+				    		echo '<div class="row"><div class="col-md mt-1"><div id="accordion'.$host['id_host'].'"><div class="card"><a class="card-link" data-toggle="collapse" href="#collapse'.$host['id_host'].'"><div class="card-header">'.$host['IP'].'</div></a><div id="collapse'.$host['id_host'].'" class="collapse" data-parent="#accordion'.$host['id_host'].'"><code>OS: '.$host['OS'].'</code><hr><code>MAC: '.$host['MAC'].'</code><hr><code>Vendor: '.$host['mac_vendor'].'</code><hr><div class="card-body"><div class="table-responsive"><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>Port</th><th>Protocol</th><th>State</th><th>Reason</th><th>Service</th><th>Product</th><th>Version</th><th>Extra Info</th></tr></thead><tbody>';
 				    		$sql = 'SELECT ports.* from ports where ports.id_host='.$host['id_host'];
 				    		$result = $conn->query($sql);
 				    		if($result->num_rows>0)

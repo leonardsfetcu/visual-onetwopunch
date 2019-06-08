@@ -35,10 +35,44 @@ $("#submitBtn").click(function(){
 		fin:$("#checkFin").is(":checked")
 	},
 		url:"scanner-processing.php",
-		success: function(result,status,xhr){
-			location.reload();	
+		success: function(result,status,xhr)
+		{
+			location.reload();
+			$.ajax(
+			{
+				type:"POST",
+				data:{runScript:"true",
+				runScriptId:result},
+				url:"scanner-processing.php",
+				success: function(data){
+					console.log(data);
+				}
+			});
 		}
 	});
+	
+});
+
+$(".modal-footer button[id='delete']").click(function(){
+	var scannerId = $(this).val();
+	$.ajax({
+		type:'POST',
+		url:'scanner-processing.php',
+		data:{deleteScanner:'true',
+		id:scannerId},
+		success: function(data)
+		{
+			console.log(data);
+			$("table tr[value='"+scannerId+"']").remove();
+		}
+	});
+	
+});
+
+$('button[id="delete"]').click(function(){
+	var scannerId = $(this).data('id');
+     	$(".modal-footer button[id='delete']").val(scannerId);
+     	$("#deleteModal").modal('show');
 });
 
 $('div[id="btn-action"]').click(function(){

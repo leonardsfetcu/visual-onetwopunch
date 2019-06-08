@@ -79,6 +79,32 @@ function array_get_range($array, $min, $max) {
 	</div>
 	<div class="row">
 		<div class="col-md border border-top-0 pb-4 pt-2">
+			<!-- The Modal -->
+			<div class="modal fa-redo-alt" id="deleteModal">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+
+			      <!-- Modal Header -->
+			      <div class="modal-header">
+			        <h4 class="modal-title">Scanner delete</h4>
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			      </div>
+
+			      <!-- Modal body -->
+			      <div class="modal-body">
+			        Are you sure you want to delete this scanner?
+			      </div>
+
+			      <!-- Modal footer -->
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+			        <button id="delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+			      </div>
+
+			    </div>
+			  </div>
+			</div>
+
 			<h3>Create a new scanner</h3>
 			  	<div class="row">
 					<div class="col-md px-4 py-2">
@@ -233,10 +259,9 @@ function array_get_range($array, $min, $max) {
 				    				{
 				    					echo '<div id="btn-action" style="display:inline;"><button class="btn-custom" id="replay"><i class="fas fa-redo-alt"></i></button></div>';
 				    				}
-									echo '<button class="btn-custom del" id="pdf"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view"><i class="fas fa-eye"></i></button></form></td>';
+									echo '<button class="btn-custom del" id="pdf"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete" data-toggle="modal" data-id="'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></form></td></tr>';
 			    			}
 			    		}
-
 			    		CloseConnection($conn);
 			    	?>
 			    </tbody>
