@@ -245,7 +245,7 @@ function array_get_range($array, $min, $max) {
 									$widthHigh = $numHigh/$numVuln*100;
 									$widthCritical = $numCritical/$numVuln*100;
 								}
-								echo '<td id="vulnerabilities"><div class="progress border"><div class="progress-bar bg-primary" style="width:'.$widthLow.'%"></div><div class="progress-bar bg-success" style="width:'.$widthMedium.'%"></div><div class="progress-bar bg-warning" style="width:'.$widthHigh.'%"></div><div class="progress-bar bg-danger" style="width:'.$widthCritical.'%"></div></div></td>';
+								echo '<td id="vulnerabilities"><div class="progress border"><div id="low" class="progress-bar bg-primary" style="width:'.$widthLow.'%"></div><div id="medium" class="progress-bar bg-success" style="width:'.$widthMedium.'%"></div><div id="high" class="progress-bar bg-warning" style="width:'.$widthHigh.'%"></div><div id="critical" class="progress-bar bg-danger" style="width:'.$widthCritical.'%"></div></div></td>';
 								echo '<td class="actions">';
 									if($scannerRow['state'] == "READY")
 									{
