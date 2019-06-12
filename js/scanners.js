@@ -52,7 +52,6 @@ $(".modal-footer button[id='delete']").click(function(){
 		id:scannerId},
 		success: function(data)
 		{
-			console.log(data);
 			$("table tr[value='"+scannerId+"']").remove();
 		}
 	});

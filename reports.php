@@ -114,11 +114,11 @@ hr {
 				    				$result=$conn->query($sql);
 				    				if($result->num_rows>0)
 				    				{
-				    					echo '<tr><td colspan="8"><div class="container"><h4>Vulnerabilities found</h4><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>CVE</th><th>Score</th><th>Description</th></tr></thead><tbody>';
+				    					echo '<tr><td colspan="8"><div class="container"><h4>Vulnerabilities found</h4><table class="table table-bordered"><thead><tr style="background-color: rgb(200,200,200);"><th>CVE</th><th>Score</th><th>Link</th></tr></thead><tbody>';
 
 				    					$vulnerabilities = $result->fetch_all(MYSQLI_ASSOC);
 				    					foreach ($vulnerabilities as $vulnerability) {
-				  							echo '<tr><td>'.$vulnerability['id_cve'].'</td><td>'.$vulnerability['score'].'</td><td>'.$vulnerability['description'].'</td></tr>';
+				  							echo '<tr><td>'.$vulnerability['id_cve'].'</td><td>'.$vulnerability['score'].'</td><td><a href="'.$vulnerability['link'].'" target="_blank">'.$vulnerability['link'].'</a></td></tr>';
 				    					}
 				    					echo '</tbody></table></div></td></tr>';
 				    				}

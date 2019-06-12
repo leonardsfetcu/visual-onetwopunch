@@ -196,8 +196,8 @@ function array_get_range($array, $min, $max) {
 					    <th style="width: 15%">Scanner</th>
 					    <th style="width: 8%">Target</th>
 					    <th style="width: 15%">Last scan</th>
-					    <th style="width: 43%">Vulnerabilities</th>
-					    <th style="width: 17%">Actions</th>
+					    <th style="width: 40%">Vulnerabilities</th>
+					    <th style="width: 20%">Actions</th>
 				    </tr>
 			    </thead>
 			    <tbody>

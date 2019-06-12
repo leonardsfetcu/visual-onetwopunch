@@ -1,7 +1,6 @@
 <?php 
 	require_once("db.php");
 	include 'xmlparser.php';
-	require_once('cleaner.php');
 
 	set_time_limit(0);
 	$conn = OpenConnection();
@@ -17,7 +16,11 @@
 	if(isset($_POST['runScript']))
 	{	
 		$id = $_POST['runScriptScannerId'];
-		
+
+		$sql = "SELECT scanners.target from scanners WHERE scanners.id_scanner=".$id;
+		$result = $conn->query($sql);
+		$target = $result->fetch_assoc()['target'];
+
 		$sql = "UPDATE scanners SET state='PROCESSING' WHERE scanners.id_scanner=".$id;
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
@@ -28,10 +31,10 @@
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
 		}
+		exec("sudo ./visual-otp.sh ".$target." ".$id,$out);
 
-		sleep(10);
 		loadScannerFromXml($id);
-		
+
 		$sql = "UPDATE scanners SET state='FINISHED' WHERE scanners.id_scanner=".$id;
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
@@ -41,7 +44,7 @@
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
 		}
-    	//removeLogs();
+    	exec("sudo ./cleaner.sh ".$id);
     	CloseConnection($conn);
 		exit();
 	}
@@ -97,7 +100,7 @@
 		{
 		    echo "Error deleting record: " . $conn->error;
 		}
-		
+		exec("sudo ./cleaner.sh");
 		CloseConnection($conn);
 		exit();
 	}
@@ -167,14 +170,6 @@
 			default:
 				break;
 		}
-		exit();
-	}
-	if(isset($_POST['play]']))
-	{
-		exit();
-	}
-	if(isset($_POST['id_scanner']))
-	{
 		exit();
 	}
 ?>

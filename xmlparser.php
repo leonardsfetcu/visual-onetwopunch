@@ -1,13 +1,14 @@
 <?php
 
 require_once('db.php');
+//loadScannerFromXml(119);
 function loadScannerFromXml($id_scanner)
 {
 
     $conn = OpenConnection();
     $scans = array(array('date'=>'','time'=>'','ip'=>array()));
 
-    $logPath = "logs"; 
+    $logPath = "logs/".$id_scanner; 
     $stdDir = array(".","..");
     $dates = array_diff(scandir($logPath), $stdDir);
     $scanCounter=0;
@@ -47,13 +48,30 @@ function loadScannerFromXml($id_scanner)
         // parse hosts
         for($j=0;$j<count($scans[$i]['ip']);$j++)
         {
+            $ip=$iptype=$mac=$vendor=$os="unknown";
             $path = "logs/".$scans[$i]['date']."/".$scans[$i]['time']."/".$scans[$i]['ip'][$j]."/".$scans[$i]['ip'][$j].".xml";
-            $xml = simplexml_load_file($path) or die("Can't parse xml string");
+            if(file_exists($path) == FALSE)
+            {
+                $tempIp=$scans[$i]['ip'][$j];
+                $sql = "INSERT INTO hosts(id_host,IP,id_scanner) VALUES (NULL,'$tempIp','$id_scanner')";
+                if ($conn->query($sql) === FALSE) 
+                {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                } 
+                continue;
+            }
+            $xml = simplexml_load_file($path);
             $ip = $xml->host->address[0]->attributes()->addr;
             $iptype = $xml->host->address[0]->attributes()->addrtype;
             $mac = $xml->host->address[1]->attributes()->addr;
             $vendor = $xml->host->address[1]->attributes()->vendor;
-            $os = $xml->host->os->osmatch->attributes()->name;
+            if(isset($xml->host->os->osmatch))
+            {
+                $osmatchAttr=$xml->host->os->osmatch->attributes();
+                if(isset($osmatchAttr->name))
+                    $os = $osmatchAttr->name;
+            }    
+                
             $sql = "INSERT INTO hosts(id_host,OS,IP,MAC,mac_vendor,id_scanner) VALUES (NULL,'$os','$ip','$mac','$vendor','$id_scanner')";
             if ($conn->query($sql) === TRUE) 
             {
@@ -67,40 +85,66 @@ function loadScannerFromXml($id_scanner)
             // parse ports
             foreach($xml->host->ports->port as $port)
             {
-
-                $portNumber = $protocol = $state = $reason = $servName = $prodName = $servVersion = $servExtra = "";
+                $portNumber = $protocol = $state = $reason = $servName = $prodName = $servVersion = $servExtra = " ";
             
-                $portNumber = $port->attributes()->portid;
-                $protocol = $port->attributes()->protocol;
-                $state = $port->state->attributes()->state;
-                $reason = $port->state->attributes()->reason;
+                $portAttr = $port->attributes();
+                if(isset($portAttr->portid))
+                    $portNumber = $portAttr->portid;
+                if(isset($portAttr->protocol))
+                    $protocol = $portAttr->protocol;
+
+                $stateAttr = $port->state->attributes();
+                if(isset($stateAttr->state))
+                    $state = $stateAttr->state;
+                if(isset($stateAttr->reason))
+                    $reason = $stateAttr->reason;
                 if(isset($port->service))
                 {
-                    $servName = $port->service->attributes()->name;
-                    $prodName = $port->service->attributes()->product;
-                    $servVersion = $port->service->attributes()->version;
-                    $servExtra = $port->service->attributes()->extrainfo;
+                    $serviceAttr = $port->service->attributes();
+                    if(isset($serviceAttr->name))
+                        $servName = $serviceAttr->name;
+                    if(isset($serviceAttr->product))
+                        $prodName = $serviceAttr->product;
+                    if(isset($serviceAttr->version))
+                        $servVersion = $serviceAttr->version;
+                    if(isset($serviceAttr->extrainfo))
+                        $servExtra = $serviceAttr->extrainfo;
                 }
+
                 $sql = "INSERT INTO ports(id_port,port_number,protocol,state,reason,service,product,version,extra,id_host) VALUES(NULL,'$portNumber','$protocol','$state','$reason','$servName','$prodName','$servVersion','$servExtra','$id_host')";
+
                 if ($conn->query($sql) === TRUE) 
                 {
                     $id_port = $conn->insert_id;
                     // parse vulnerabilities
                     if(isset($port->script))
                     {
-                        foreach ($port->script as $script) {
-                            if($script->attributes()->id == "vulners")
+                        foreach ($port->script as $script) 
+                        {
+
+                            if(strcmp($script->attributes()->id,"vulners")==0)
                             {
+
                                 $cves = explode("\t",trim($script->elem));
-                                for($k=0;$k<count($cves)/5;$k++)
+
+                                $sanitizedCves = array();
+                                for($k=0;$k<count($cves);$k++)
                                 {
-                                    $cveName = $cves[$k*5];
-                                    $score = $cves[$k*5+2];
+                                    if(strcmp($cves[$k],""))
+                                        $sanitizedCves[] = $cves[$k];
+                                }
+
+                                for($k=0;$k<count($sanitizedCves);$k+=3)
+                                {
+                                    $cveName = $sanitizedCves[$k];
+                                    $score = $sanitizedCves[$k+1];
+                                    $link = $sanitizedCves[$k+2]; 
+
                                     $sql = "select vulnerabilities.id_cve from vulnerabilities where vulnerabilities.id_cve='".$cveName."'";
                                     $result = $conn->query($sql);
                                     if($result->num_rows == 0)
                                     {
-                                        $sql = "INSERT INTO vulnerabilities(id_cve,score) VALUES('$cveName','$score')";
+                                        $sql = "INSERT INTO vulnerabilities(id_cve,score,link) VALUES('$cveName','$score','$link')";
                                         if ($conn->query($sql) === FALSE)
                                         {
                                             exit();
@@ -111,6 +155,7 @@ function loadScannerFromXml($id_scanner)
                                     {
                                         exit();
                                     }
+
                                 }
                             }
                         }
@@ -124,7 +169,6 @@ function loadScannerFromXml($id_scanner)
             }
         }
     }
-
     CloseConnection($conn);
 }
 

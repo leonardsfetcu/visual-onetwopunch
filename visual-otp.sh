@@ -1,12 +1,25 @@
 #!/bin/bash
 
 target=$1
+scannerId=$2
+
+if [ -z $2 ] || [ -z $1 ]; then
+	echo "Invalid parameters"
+	exit
+fi
 
 
 if [[ ! -d "logs" ]]; then
 	mkdir "logs"
 fi
-path="logs"
+
+path="logs/$scannerId"
+if [[ ! -d $path ]]; then
+	mkdir $path
+fi
+
+# save the pids for current instance of scanner script
+ps -aux | grep [v]isual | head -n 3 | tr -s ' ' | cut -d ' ' -f2 > $path/"pids.txt"
 
 # check if a dir with same date exists and create a new one if not
 if [[ ! -d "$path/$(date '+%d-%m-%Y')" ]]; then
@@ -35,7 +48,7 @@ while read ip; do
 	echo "IP: $ip"
 
 	echo "TCP port scanning"
-	unicornscan -mT -l $localPath/${ip}-tcp-ports.txt ${ip}:a
+	unicornscan -mT -l $localPath/${ip}-tcp-ports.txt ${ip}
 
 	echo "UDP port scanning"
 	unicornscan -mU -l $localPath/${ip}-udp-ports.txt ${ip}
@@ -57,11 +70,6 @@ while read ip; do
 		echo "nmap -sV --script nmap-vulners -O -T4 -sS -sU -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip"
 		nmap -sV --script nmap-vulners -O -T4 -sS -sU -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip
 	fi
-
-	
-	
-	
-	
 done < $path/live-hosts.txt
 
 end=$(date '+%d-%m-%Y %H:%M:%S')
