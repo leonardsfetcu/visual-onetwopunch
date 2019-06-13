@@ -259,7 +259,7 @@ function array_get_range($array, $min, $max) {
 				    				{
 				    					echo '<div id="btn-action" style="display:inline;"><button class="btn-custom" id="replay"><i class="fas fa-redo-alt"></i></button></div>';
 				    				}
-									echo '<button class="btn-custom del" id="pdf"><i class="far fa-file-pdf"></i></button><button class="btn-custom del" id="delete" data-toggle="modal" data-id="'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></form></td></tr>';
+									echo '<form style="display:inline;" method="GET" action="pdf-generator.php"><button class="btn-custom del" id="pdf" name="submit" value="pdf-'.$scannerRow['id_scanner'].'"><i class="far fa-file-pdf"></i></button></form><button class="btn-custom del" id="delete" data-toggle="modal" data-id="'.$scannerRow['id_scanner'].'"><i class="fas fa-trash-alt"></i></button><form style="display:inline;" method="GET" action="reports.php"><button class="btn-custom" name ="submit" value="view-'.$scannerRow['id_scanner'].'"><i class="fas fa-eye"></i></button></form></td></tr>';
 			    			}
 			    		}
 			    		CloseConnection($conn);
