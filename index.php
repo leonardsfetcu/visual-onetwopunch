@@ -61,7 +61,7 @@ require_once('dashboard-processing.php');
         <div class="col-md border mt-2 mx-2">
              <div class="row">
                 <div class="container-fluid">
-                    <h4 class="text-secondary">Dashboard</h4>
+                    <h4 class="text-secondary">Scanners Statistics</h4>
                 </div>
             </div>
             <div class="row text-white">
@@ -87,7 +87,7 @@ require_once('dashboard-processing.php');
                     <div class="row" style="padding: 5px">
                         <div class="col bg-info rounded">
                             <h2 class="text-center"><?php echo count(getPorts()); ?></h2>
-                            <h6 class="text-center">Services Found</h6>
+                            <h6 class="text-center">Open Ports Found</h6>
                         </div>
                     </div>
                 </div>

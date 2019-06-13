@@ -2,6 +2,7 @@
 
 target=$1
 scannerId=$2
+nmapParam="-sV --script nmap-vulners -O -T4 -sS"
 
 if [ -z $2 ] || [ -z $1 ]; then
 	echo "Invalid parameters"
@@ -19,7 +20,7 @@ if [[ ! -d $path ]]; then
 fi
 
 # save the pids for current instance of scanner script
-ps -aux | grep [v]isual | head -n 3 | tr -s ' ' | cut -d ' ' -f2 > $path/"pids.txt"
+ps -aux | grep [v]isual | tr -s ' ' | cut -d ' ' -f2 > $path/"pids.txt"
 
 # check if a dir with same date exists and create a new one if not
 if [[ ! -d "$path/$(date '+%d-%m-%Y')" ]]; then
@@ -45,30 +46,30 @@ while read ip; do
 	localPath=$path/$ip
 	mkdir $localPath
 
-	echo "IP: $ip"
-
-	echo "TCP port scanning"
+	echo "[unicornscan] TCP ports scanning($ip)"
 	unicornscan -mT -l $localPath/${ip}-tcp-ports.txt ${ip}
 
-	echo "UDP port scanning"
+	echo "[unicornscan] UDP ports scanning($ip)"
 	unicornscan -mU -l $localPath/${ip}-udp-ports.txt ${ip}
 	
 	tcpPorts=$(cat $localPath/${ip}-tcp-ports.txt | grep open | cut -d"[" -f2 | cut -d"]" -f1 | sed 's/ //g' | tr '\n' ',' | sed 's/.$//')
 	udpPorts=$(cat $localPath/${ip}-udp-ports.txt | grep open | cut -d"[" -f2 | cut -d"]" -f1 | sed 's/ //g' | tr '\n' ',' | sed 's/.$//')
 
-	echo "NMAP scanning"
+	echo "[unicornscan] TCP open ports found: $tcpPorts"
+	echo "[unicornscan] UDP open ports found: $udpPorts" 
 
 	if [ -z $tcpPorts ] && [ -z $udpPorts ]; then
-		echo "No open ports for IP $ip"
+		echo "[NMAP] $nmapParam($ip)"
+		nmap $nmapParam -oX $localPath/${ip}.xml $ip
 	elif [ -n $tcpPorts ] && [ -z $udpPorts ]; then
-		echo "nmap -sV --script nmap-vulners -O -T4 -sS -p $tcpPorts -oX $localPath/${ip}.xml $ip"
-		nmap -sV --script nmap-vulners -O -T4 -sS -p $tcpPorts -oX $localPath/${ip}.xml $ip
+		echo "[NMAP] $nmapParam -p $tcpPorts($ip)"
+		nmap $nmapParam -p $tcpPorts -oX $localPath/${ip}.xml $ip
 	elif [ -n $udpPorts ] && [ -z $tcpPorts ]; then
-		echo "nmap -sV --script nmap-vulners -O -T4 -sU -p $udpPorts -oX $localPath/${ip}.xml $ip"
-		nmap -sV --script nmap-vulners -O -T4 -sU -p $udpPorts -oX $localPath/${ip}.xml $ip
+		echo "[NMAP] $nmapParam -p $udpPorts($ip)"
+		nmap $nmapParam -p $udpPorts -oX $localPath/${ip}.xml $ip
 	else
-		echo "nmap -sV --script nmap-vulners -O -T4 -sS -sU -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip"
-		nmap -sV --script nmap-vulners -O -T4 -sS -sU -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip
+		echo "[NMAP] $nmapParam -p T:$tcpPorts,U:$udpPorts($ip)"
+		nmap $nmapParam -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip
 	fi
 done < $path/live-hosts.txt
 

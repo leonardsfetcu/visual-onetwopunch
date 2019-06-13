@@ -1,7 +1,7 @@
 <?php
 
 require_once('db.php');
-//loadScannerFromXml(119);
+
 function loadScannerFromXml($id_scanner)
 {
 
@@ -16,6 +16,9 @@ function loadScannerFromXml($id_scanner)
     foreach ($dates as $date) 
     {
         $timePath = $logPath."/".$date;
+        if(is_file($timePath))
+            continue;
+
         $times = array_diff(scandir($timePath),$stdDir);
         foreach($times as $time)
         {
@@ -41,7 +44,7 @@ function loadScannerFromXml($id_scanner)
             }
         }
     }
-
+    var_dump($scans);
     // parse xml files
     for($i=0;$i<count($scans);$i++)
     {
@@ -49,9 +52,10 @@ function loadScannerFromXml($id_scanner)
         for($j=0;$j<count($scans[$i]['ip']);$j++)
         {
             $ip=$iptype=$mac=$vendor=$os="unknown";
-            $path = "logs/".$scans[$i]['date']."/".$scans[$i]['time']."/".$scans[$i]['ip'][$j]."/".$scans[$i]['ip'][$j].".xml";
+            $path = $logPath."/".$scans[$i]['date']."/".$scans[$i]['time']."/".$scans[$i]['ip'][$j]."/".$scans[$i]['ip'][$j].".xml";
             if(file_exists($path) == FALSE)
             {
+                echo "NU EXISTA: ".$path;
                 $tempIp=$scans[$i]['ip'][$j];
                 $sql = "INSERT INTO hosts(id_host,IP,id_scanner) VALUES (NULL,'$tempIp','$id_scanner')";
                 if ($conn->query($sql) === FALSE) 
@@ -61,10 +65,24 @@ function loadScannerFromXml($id_scanner)
                 continue;
             }
             $xml = simplexml_load_file($path);
-            $ip = $xml->host->address[0]->attributes()->addr;
-            $iptype = $xml->host->address[0]->attributes()->addrtype;
-            $mac = $xml->host->address[1]->attributes()->addr;
-            $vendor = $xml->host->address[1]->attributes()->vendor;
+            if(isset($xml->host->address[0]))
+            {
+                $addressAttr=$xml->host->address[0]->attributes();
+
+                if(isset($addressAttr->addr))
+                    $ip = $addressAttr->addr;
+                if(isset($addressAttr->addrtype))
+                    $iptype = $addressAttr->addrtype;
+            }
+            if(isset($xml->host->address[1]))
+            {
+                $addressAttr=$xml->host->address[1]->attributes();
+
+                if(isset($addressAttr->addr))
+                    $mac = $addressAttr->addr;
+                if(isset($addressAttr->vendor))
+                    $vendor = $addressAttr->vendor;
+            }
             if(isset($xml->host->os->osmatch))
             {
                 $osmatchAttr=$xml->host->os->osmatch->attributes();
@@ -171,7 +189,4 @@ function loadScannerFromXml($id_scanner)
     }
     CloseConnection($conn);
 }
-
-
-
 ?>

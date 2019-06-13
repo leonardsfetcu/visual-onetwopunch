@@ -6,6 +6,7 @@ var ready = '<td id="state" value="READY" class="px-4"><i class="far fa-question
 var play = '<button class="btn-custom" id="play"><i class="fas fa-play"></i></button></a>';
 var stop = '<button class="btn-custom" id="stop"><i class="fas fa-stop"></i></button>';
 var replay = '<button class="btn-custom" id="replay"><i class="fas fa-redo-alt"></i></button></a>';
+
 $("select").change(function(){
 	
 	if($("select").val() ==='custom')
@@ -37,6 +38,10 @@ $("#submitBtn").click(function(){
 		url:"scanner-processing.php",
 		success: function(result,status,xhr)
 		{
+			if(result.length)
+			{
+				console.log("(submit btn) New Scanner: "+result);
+			}	
 			location.reload();
 		}
 	});
@@ -52,6 +57,10 @@ $(".modal-footer button[id='delete']").click(function(){
 		id:scannerId},
 		success: function(data)
 		{
+			if(data.length)
+			{
+				console.log("(modal delete btn) Delete Scanner: "+data);		
+			}	
 			$("table tr[value='"+scannerId+"']").remove();
 		}
 	});
@@ -80,6 +89,10 @@ $('div[id="btn-action"]').click(function(){
 				runScriptScannerId:scannerId},
 				url:"scanner-processing.php",
 				success: function(data){
+					if(data.length)
+					{
+						console.log("(play) Run Script: "+data);
+					}	
 				}
 			});
 		//replace status to PROCESSING
@@ -125,6 +138,10 @@ $('div[id="btn-action"]').click(function(){
 			id:scannerId},
 			success: function(data)
 			{
+				if(data.length)
+				{
+					console.log("(replay) Delete Hosts: "+data);	
+				}	
 			}
 		});
 		$.ajax(
@@ -134,6 +151,10 @@ $('div[id="btn-action"]').click(function(){
 				runScriptScannerId:scannerId},
 				url:"scanner-processing.php",
 				success: function(data){
+					if(data.length)
+					{
+						console.log("(replay) Delete Scanner: "+data);	
+					}
 				}
 			});
 		var param = {'state':'PROCESSING','id_scanner':scannerId};
@@ -149,29 +170,35 @@ function updateScanner(id)
 		data:{vulnUpdate:'true',
 			id_scanner:id},
 		success: function(data){
-			var result = jQuery.parseJSON(data);
-			if(result.state === "FINISHED")
-			{
-				//replace status to FINISHE
-				$('tr[id="row"][value="'+id+'"] td[id="state"]').replaceWith(finished);
-				//replace action btn to REPLAY
-				$('tr[id="row"][value="'+id+'"] div[id="btn-action"] button').replaceWith(replay);
+			try {
+				var result = jQuery.parseJSON(data);
+				if(result.state === "FINISHED")
+				{
+					//replace status to FINISHE
+					$('tr[id="row"][value="'+id+'"] td[id="state"]').replaceWith(finished);
+					//replace action btn to REPLAY
+					$('tr[id="row"][value="'+id+'"] div[id="btn-action"] button').replaceWith(replay);
+				}
+				if(result.state === "PROCESSING")
+				{
+					//replace status to FINISHE
+					$('tr[id="row"][value="'+id+'"] td[id="state"]').replaceWith(processing);
+					//replace action btn to REPLAY
+					$('tr[id="row"][value="'+id+'"] div[id="btn-action"] button').replaceWith(stop);
+				}
+				
+				//add end time
+				$('tr[id="row"][value="'+id+'"] td[id="end"]').text(result.end);
+				//add vuln progressbar
+				$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="low"]').width(result.widthLow+'%');
+				$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="medium"]').width(result.widthMedium+'%');
+				$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="high"]').width(result.widthHigh+'%');
+				$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="critical"]').width(result.widthCritical+'%');
 			}
-			if(result.state === "PROCESSING")
+			catch(e)
 			{
-				//replace status to FINISHE
-				$('tr[id="row"][value="'+id+'"] td[id="state"]').replaceWith(processing);
-				//replace action btn to REPLAY
-				$('tr[id="row"][value="'+id+'"] div[id="btn-action"] button').replaceWith(stop);
+				console.log("UpdateScanner: "+e.message);
 			}
-			
-			//add end time
-			$('tr[id="row"][value="'+id+'"] td[id="end"]').text(result.end);
-			//add vuln progressbar
-			$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="low"]').width(result.widthLow+'%');
-			$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="medium"]').width(result.widthMedium+'%');
-			$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="high"]').width(result.widthHigh+'%');
-			$('tr[id="row"][value="'+id+'"] td[id="vulnerabilities"] div[id="critical"]').width(result.widthCritical+'%');
 		}
 	});
 }
@@ -184,9 +211,15 @@ function getContent(info)
             url: 'http://localhost/server.php',
             data: queryString,
             success: function(data){
-                var obj = jQuery.parseJSON(data);
-                updateScanner(obj.id_scanner)
-                getContent(obj);
+            	try{
+            		var obj = jQuery.parseJSON(data);
+	                updateScanner(obj.id_scanner)
+	                getContent(obj);
+            	}
+            	catch(e)
+            	{
+            		console.log(e.message);
+            	}
             }
         }
     );

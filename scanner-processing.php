@@ -5,7 +5,6 @@
 	set_time_limit(0);
 	$conn = OpenConnection();
 	CheckConnection($conn);
-	$last_id = -1; 
 
 	function array_get_range($array, $min, $max) {
     return array_filter($array, function($element) use ($min, $max) {
@@ -16,9 +15,16 @@
 	if(isset($_POST['runScript']))
 	{	
 		$id = $_POST['runScriptScannerId'];
+		$id = $conn->real_escape_string($id);
 
 		$sql = "SELECT scanners.target from scanners WHERE scanners.id_scanner=".$id;
 		$result = $conn->query($sql);
+		if($result->num_rows === 0 )
+		{
+			echo "No scanners found for id=".$id;
+			CloseConnection($conn);
+			exit();
+		}
 		$target = $result->fetch_assoc()['target'];
 
 		$sql = "UPDATE scanners SET state='PROCESSING' WHERE scanners.id_scanner=".$id;
@@ -31,7 +37,7 @@
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
 		}
-		exec("sudo ./visual-otp.sh ".$target." ".$id,$out);
+		exec("sudo ./visual-otp.sh ".$target." ".$id);
 
 		loadScannerFromXml($id);
 
@@ -52,7 +58,7 @@
 	if(isset($_POST['vulnUpdate']))
 	{
 		$id = $_POST['id_scanner'];
-
+		$id = $conn->real_escape_string($id);
 		$vulnResult = $conn->query("select vulnerabilities.score from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities_list.id_cve=vulnerabilities.id_cve INNER JOIN ports on vulnerabilities_list.id_port=ports.id_port INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner where scanners.id_scanner=".$id);
 
 		$widthLow=$widthMedium=$widthHigh=$widthCritical=0;
@@ -85,6 +91,7 @@
 	if(isset($_POST['deleteHosts']))
 	{
 		$id = $_POST['id'];
+		$id = $conn->real_escape_string($id);
 		$sql = 'DELETE FROM hosts WHERE hosts.id_scanner='.$id;
 		if($conn->query($sql)===FALSE)
 		{
@@ -96,11 +103,12 @@
 	if(isset($_POST['deleteScanner']))
 	{
 		$scannerId = $_POST['id'];
+		$scannerId = $conn->real_escape_string($scannerId);
 		if ($conn->query("DELETE FROM scanners WHERE scanners.id_scanner=".$scannerId) === FALSE)
 		{
 		    echo "Error deleting record: " . $conn->error;
 		}
-		exec("sudo ./cleaner.sh");
+		exec("sudo ./cleaner.sh ".$scannerId);
 		CloseConnection($conn);
 		exit();
 	}
@@ -145,31 +153,33 @@
 				# code...
 				break;
 		}
+		$name = $conn->real_escape_string($name);
+		$target = $conn->real_escape_string($target);
+		$sS = $conn->real_escape_string($sS);
+		$sT = $conn->real_escape_string($sT);
+		$sU = $conn->real_escape_string($sU);
+		$sY = $conn->real_escape_string($sY);
+		$sN = $conn->real_escape_string($sN);
+		$sF = $conn->real_escape_string($sF);
+		$sA = $conn->real_escape_string($sA);
+		$sX = $conn->real_escape_string($sX);
+		$sM = $conn->real_escape_string($sM);
+		$sO = $conn->real_escape_string($sO);
+		$sW = $conn->real_escape_string($sW);
+		$urg = $conn->real_escape_string($urg);
+		$ack = $conn->real_escape_string($ack);
+		$psh = $conn->real_escape_string($psh);
+		$rst = $conn->real_escape_string($rst);
+		$syn = $conn->real_escape_string($syn);
+		$fin = $conn->real_escape_string($fin);
+
 		$sql = "INSERT INTO scanners(id_scanner,state,name,target,start,end,sS,sT,sU,sY,sN,sF,sA,sX,sM,sO,sW,urg,ack,psh,rst,syn,fin) VALUES (NULL,'READY','$name','$target',NULL,NULL,'$sS','$sT','$sU','$sY','$sN','$sF','$sA','$sX','$sM','$sO','$sW','$urg','$ack','$psh','$rst','$syn','$fin')";
-		if ($conn->query($sql) === TRUE) 
+		if ($conn->query($sql) === FALSE) 
 		{
-    		$last_id = $conn->insert_id;  
-    		//echo $last_id;  		
-		} 
-		else
-		{
-    		//echo "Error: " . $sql . "<br>" . $conn->error;
+    		echo "Error: " . $sql . "<br>" . $conn->error;
 		}
 		CloseConnection($conn);
 		exit();
 	}
-	if(isset($_POST['action']))
-	{
-		switch ($_POST['action']) {
-			case 'replay':
-				//echo 'am trimis replay';
-				break;				
-			case 'pdf':
-				//echo 'am trimis pdf';
-				break;			
-			default:
-				break;
-		}
-		exit();
-	}
+
 ?>

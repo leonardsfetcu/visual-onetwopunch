@@ -38,7 +38,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script type="text/javascript" src="lineChart.js"></script>
 </head>
 <style>
 code {
