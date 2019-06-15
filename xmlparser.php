@@ -44,7 +44,6 @@ function loadScannerFromXml($id_scanner)
             }
         }
     }
-    var_dump($scans);
     // parse xml files
     for($i=0;$i<count($scans);$i++)
     {

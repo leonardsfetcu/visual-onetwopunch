@@ -28,6 +28,7 @@ $("#submitBtn").click(function(){
 		name:$("#name").val(),
 		target:$("#target").val(),
 		technique:$("select").val(),
+		udp:$("#switchUdp").is(":checked"),
 		urg:$("#checkUrg").is(":checked"),
 		ack:$("#checkAck").is(":checked"),
 		psh:$("#checkPsh").is(":checked"),
@@ -104,21 +105,30 @@ $('div[id="btn-action"]').click(function(){
 	}	
 	if(action === "stop")
 	{
-		/*$.ajax({
+		$.ajax({
 			type:'POST',
 			url:'scanner-processing.php',
-			data:{deleteScanner:'true',
-			id:scannerId},
-			success: function(data)
+			data:{killProcess:true,
+				id_scanner:scannerId},
+			success:function(data)
 			{
-				console.log(data);
-				$("table tr[value='"+scannerId+"']").remove();
+				console.log("(stop) killProcess: "+data);
+				$.ajax({
+				type:'POST',
+				url:'scanner-processing.php',
+				data:{deleteHosts:'true',
+				id:scannerId},
+				success: function(data)
+				{
+					if(data.length)
+					{
+						console.log("(stop) Delete Hosts: "+data);
+					}
+				}
+				});
 			}
 		});
-		//replace status to READY
-		$(this).closest('tr').find('td[id="state"]').replaceWith(ready);
-		//replace action btn to PLAY
-		$(this).find(".btn-custom").replaceWith(play);*/
+		
 	}
 	if(action === "replay")
 	{
@@ -153,7 +163,7 @@ $('div[id="btn-action"]').click(function(){
 				success: function(data){
 					if(data.length)
 					{
-						console.log("(replay) Delete Scanner: "+data);	
+						console.log("(replay) Run Script: "+data);	
 					}
 				}
 			});

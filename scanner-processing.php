@@ -6,18 +6,134 @@
 	$conn = OpenConnection();
 	CheckConnection($conn);
 
-	function array_get_range($array, $min, $max) {
-    return array_filter($array, function($element) use ($min, $max) {
-       return $element['score'] >= $min && $element['score'] <= $max; 
-    });
-}
+	function array_get_range($array, $min, $max) 
+	{
+    	return array_filter($array, function($element) use ($min, $max) 
+    	{
+       		return $element['score'] >= $min && $element['score'] <= $max; 
+    	});
+	}
+	function getNmapParams($scannerDetails)
+    {
+    	$nmapParams = "";
 
+		if($scannerDetails['sS'])
+		{
+			$nmapParams .= "-sS ";
+		}
+		if($scannerDetails['sT'])
+		{
+			$nmapParams .= "-sT ";
+		}
+		if($scannerDetails['sU'])
+		{
+			$nmapParams .= "-sU ";
+		}
+		if($scannerDetails['sY'])
+		{
+			$nmapParams .= "-sY ";
+		}
+		if($scannerDetails['sN'])
+		{
+			$nmapParams .= "-sN ";
+		}
+		if($scannerDetails['sF'])
+		{
+			$nmapParams .= "-sF ";
+		}
+		if($scannerDetails['sX'])
+		{
+			$nmapParams .= "-sX ";
+		}
+		if($scannerDetails['sA'])
+		{
+			$nmapParams .= "-sA ";
+		}
+		if($scannerDetails['urg'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags URG";
+			}
+			else
+			{
+				$nmapParams .= "URG";
+			}
+			
+		}
+		if($scannerDetails['rst'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags RST";
+			}
+			else
+			{
+				$nmapParams .= "RST";
+			}
+		}
+		if($scannerDetails['fin'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags FIN";
+			}
+			else
+			{
+				$nmapParams .= "FIN";
+			}
+		}
+		if($scannerDetails['ack'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags ACK";
+			}
+			else
+			{
+				$nmapParams .= "ACK";
+			}
+		}
+		if($scannerDetails['psh'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags PSH";
+			}
+			else
+			{
+				$nmapParams .= "PSH";
+			}
+		}
+		if($scannerDetails['syn'])
+		{
+			if(strpos($nmapParams,"--scanflags")===false)
+			{
+				$nmapParams .= "--scanflags SYN";
+			}
+			else
+			{
+				$nmapParams .= "SYN";
+			}
+		}
+		return $nmapParams;
+    }
+
+	if(isset($_POST['killProcess']))
+	{
+		if(is_numeric($_POST['id_scanner']))
+		{
+			exec("sudo ./kill-visual-otp.sh ".$_POST['id_scanner'],$out);
+			var_dump($out);
+		}
+		exit();
+	}
 	if(isset($_POST['runScript']))
 	{	
 		$id = $_POST['runScriptScannerId'];
 		$id = $conn->real_escape_string($id);
 
-		$sql = "SELECT scanners.target from scanners WHERE scanners.id_scanner=".$id;
+		$sql = "SELECT scanners.* from scanners WHERE scanners.id_scanner=".$id;
 		$result = $conn->query($sql);
 		if($result->num_rows === 0 )
 		{
@@ -25,8 +141,11 @@
 			CloseConnection($conn);
 			exit();
 		}
-		$target = $result->fetch_assoc()['target'];
+		$scannerDetails = $result->fetch_assoc();
+		$target = $scannerDetails['target'];
 
+		$nmapParams = getNmapParams($scannerDetails);
+		echo "PARAMETRII: ".$nmapParams;
 		$sql = "UPDATE scanners SET state='PROCESSING' WHERE scanners.id_scanner=".$id;
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
@@ -37,8 +156,8 @@
 		if ($conn->query($sql) === FALSE) {
 		    echo "Error updating record: " . $conn->error;
 		}
-		exec("sudo ./visual-otp.sh ".$target." ".$id);
-
+		exec("sudo ./visual-otp.sh ".$target." ".$id." \"".$nmapParams."\"",$out);
+		var_dump($out);
 		loadScannerFromXml($id);
 
 		$sql = "UPDATE scanners SET state='FINISHED' WHERE scanners.id_scanner=".$id;
@@ -114,16 +233,16 @@
 	}
 	if(isset($_POST['newScanner']))
 	{
+		echo "TEST";
 		$name = $_POST['name'];
 		$target = $_POST['target'];
 		$urg=$ack=$rst=$psh=$syn=$fin=0;
-		$sS=$sT=$sU=$sY=$sN=$sF=$sA=$sX=$sM=$sO=$sW=0;
+		$sS=$sT=$sU=$sY=$sN=$sF=$sA=$sX=0;
+		$sU = $_POST['udp'] === "true" ? 1:0;
 		switch ($_POST['technique']) {
 			case 'sS':	$sS = true;
 				break;
 			case 'sT':	$sT = true;
-				break;
-			case 'sU':	$sU = true;
 				break;
 			case 'sY':	$sY = true;
 				break;
@@ -134,12 +253,6 @@
 			case 'sA':	$sA = true;
 				break;
 			case 'sX':	$sX = true;
-				break;
-			case 'sM':	$sM = true;
-				break;
-			case 'sO':	$sO = true;
-				break;
-			case 'sW':	$sW = true;
 				break;
 			case 'custom':
 				$urg = $_POST["urg"];
@@ -163,9 +276,6 @@
 		$sF = $conn->real_escape_string($sF);
 		$sA = $conn->real_escape_string($sA);
 		$sX = $conn->real_escape_string($sX);
-		$sM = $conn->real_escape_string($sM);
-		$sO = $conn->real_escape_string($sO);
-		$sW = $conn->real_escape_string($sW);
 		$urg = $conn->real_escape_string($urg);
 		$ack = $conn->real_escape_string($ack);
 		$psh = $conn->real_escape_string($psh);
@@ -173,7 +283,7 @@
 		$syn = $conn->real_escape_string($syn);
 		$fin = $conn->real_escape_string($fin);
 
-		$sql = "INSERT INTO scanners(id_scanner,state,name,target,start,end,sS,sT,sU,sY,sN,sF,sA,sX,sM,sO,sW,urg,ack,psh,rst,syn,fin) VALUES (NULL,'READY','$name','$target',NULL,NULL,'$sS','$sT','$sU','$sY','$sN','$sF','$sA','$sX','$sM','$sO','$sW','$urg','$ack','$psh','$rst','$syn','$fin')";
+		$sql = "INSERT INTO scanners(id_scanner,state,name,target,start,end,sS,sT,sU,sY,sN,sF,sA,sX,urg,ack,psh,rst,syn,fin) VALUES (NULL,'READY','$name','$target',NULL,NULL,'$sS','$sT','$sU','$sY','$sN','$sF','$sA','$sX',$urg,$ack,$psh,$rst,$syn,$fin)";
 		if ($conn->query($sql) === FALSE) 
 		{
     		echo "Error: " . $sql . "<br>" . $conn->error;

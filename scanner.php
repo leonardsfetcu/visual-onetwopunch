@@ -129,9 +129,6 @@ function array_get_range($array, $min, $max) {
 					      <option value="sF">TCP FIN scan</option>
 					      <option value="sX">TCP Xmas scan</option>
 					      <option value="sA">TCP ACK scan</option>
-						  <option value="sW">TCP Window scan</option>
-					      <option value="sM">TCP Maimon scan</option>
-					      <option value="sO">IP Protocol scan</option>
 					      <option value="custom">Custom TCP scan</option>
 					    </select>
 					</div>

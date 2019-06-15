@@ -2,8 +2,8 @@
 
 target=$1
 scannerId=$2
-nmapParam="-sV --script nmap-vulners -O -T4 -sS"
-
+nmapParam="-sV --script nmap-vulners -O -T4 $3"
+nmapString=""
 if [ -z $2 ] || [ -z $1 ]; then
 	echo "Invalid parameters"
 	exit
@@ -60,15 +60,19 @@ while read ip; do
 
 	if [ -z $tcpPorts ] && [ -z $udpPorts ]; then
 		echo "[NMAP] $nmapParam($ip)"
+		nmapString="nmap $nmapParam -oX $localPath/${ip}.xml $ip"
 		nmap $nmapParam -oX $localPath/${ip}.xml $ip
 	elif [ -n $tcpPorts ] && [ -z $udpPorts ]; then
 		echo "[NMAP] $nmapParam -p $tcpPorts($ip)"
+		nmapString="nmap $nmapParam -p $tcpPorts -oX $localPath/${ip}.xml $ip"
 		nmap $nmapParam -p $tcpPorts -oX $localPath/${ip}.xml $ip
 	elif [ -n $udpPorts ] && [ -z $tcpPorts ]; then
 		echo "[NMAP] $nmapParam -p $udpPorts($ip)"
+		nmapString="nmap $nmapParam -p $udpPorts -oX $localPath/${ip}.xml $ip"
 		nmap $nmapParam -p $udpPorts -oX $localPath/${ip}.xml $ip
 	else
 		echo "[NMAP] $nmapParam -p T:$tcpPorts,U:$udpPorts($ip)"
+		nmapString="nmap $nmapParam -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip"
 		nmap $nmapParam -p "T:$tcpPorts,U:$udpPorts" -oX $localPath/${ip}.xml $ip
 	fi
 done < $path/live-hosts.txt
@@ -76,3 +80,4 @@ done < $path/live-hosts.txt
 end=$(date '+%d-%m-%Y %H:%M:%S')
 echo "START: $start"
 echo "END: $end"
+echo "$nmapString"

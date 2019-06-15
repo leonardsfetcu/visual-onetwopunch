@@ -74,51 +74,53 @@ function generatePDF($id_scanner)
 	$row = $result->fetch_assoc();
 	$vulnData[] = $row['total'];
 	$sql = "select count(vulnerabilities.id_cve) as total from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities.id_cve=vulnerabilities_list.id_cve INNER JOIN ports on vulnerabilities_list.id_port=ports.id_port INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner WHERE scanners.id_scanner=".$id_scanner." and vulnerabilities.score >=8 and vulnerabilities.score <= 10";
+
 	$result = $conn->query($sql);
 	$row = $result->fetch_assoc();
 	$vulnData[] = $row['total'];
 
-	$sql = "select count(ports.id_port) as total from ports INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner WHERE scanners.id_scanner=".$id_scanner;
+	$sql = "select ports.* from ports INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner WHERE scanners.id_scanner=".$id_scanner;
 	$result = $conn->query($sql);
-	$row = $result->fetch_assoc();
-	$totalPorts = $row['total'];
+	$portsData = $result->fetch_all(MYSQLI_ASSOC);
+	$totalPorts = count($portsData);
+
 	$sql = "select * from scanners WHERE scanners.id_scanner=".$id_scanner;
 	$result=$conn->query($sql);
-	$scannerRow = $result->fetch_assoc();
+	$scannerData = $result->fetch_assoc();
+
+	$sql = "select * from hosts INNER JOIN scanners on hosts.id_scanner=scanners.id_scanner WHERE scanners.id_scanner=".$id_scanner;
+	$result = $conn->query($sql);
+	$totalHosts = $result->fetch_all(MYSQLI_ASSOC);
+
+	$sql = "select vulnerabilities.*, ports.id_host,ports.service, ports.id_port, ports.port_number, ports.protocol as total from vulnerabilities INNER JOIN vulnerabilities_list on vulnerabilities.id_cve=vulnerabilities_list.id_cve INNER JOIN ports on vulnerabilities_list.id_port=ports.id_port INNER JOIN hosts on hosts.id_host=ports.id_host INNER JOIN scanners on scanners.id_scanner=hosts.id_scanner WHERE scanners.id_scanner=".$id_scanner;
+	$result=$conn->query($sql);
+	$vulnRows = $result->fetch_all(MYSQLI_ASSOC);
+
 	$technique = "";
-	if($scannerRow['sS'])
+	if($scannerData['sS'])
 		$technique="TCP SYN Scan";
 
-	if($scannerRow['sT'])
+	if($scannerData['sT'])
 		$technique="TCP Connect Scan";
 
-	if($scannerRow['sU'])
+	if($scannerData['sU'])
 		$technique="UDP Scan";
 
-	if($scannerRow['sY'])
+	if($scannerData['sY'])
 		$technique="SCTP Init Scan";
 
-	if($scannerRow['sN'])
+	if($scannerData['sN'])
 		$technique="TCP NULL Scan";
 
-	if($scannerRow['sF'])
+	if($scannerData['sF'])
 		$technique="TCP Fin Scan";
 
-	if($scannerRow['sX'])
+	if($scannerData['sX'])
 		$technique="TCP Xmas Scan";
 
-	if($scannerRow['sA'])
+	if($scannerData['sA'])
 		$technique="TCP ACK Scan";
-
-	if($scannerRow['sW'])
-		$technique="TCP Window Scan";
-
-	if($scannerRow['sM'])
-		$technique="TCP Maimon Scan";
-
-	if($scannerRow['sO'])
-		$technique="IP Protocol Scan";
-
+	
 	// End configuration
 
 
@@ -150,9 +152,9 @@ function generatePDF($id_scanner)
 	$pdf->Cell( 0, 10, $reportName, 0, 0, 'C' );
 	$pdf->SetFont( 'Times', 'I', 14 );
 	$pdf->Ln();
-	$pdf->Cell( 0, 15, "Scanner name", 0, 0, 'C' );
+	$pdf->Cell( 0, 15, $scannerData['name'], 0, 0, 'C' );
 	$pdf->Ln(8);
-	$pdf->Cell( 0, 15, "Date: 10/06/2019", 0, 0, 'C' );
+	$pdf->Cell( 0, 15, "Date: ".$scannerData['end'], 0, 0, 'C' );
 
 
 	// add first page
@@ -187,10 +189,10 @@ function generatePDF($id_scanner)
 
 	$pdf->SetXY(65,40);
 	$pdf->SetFont('Arial','',14);
-	$pdf->Cell(135,12,$scannerRow['name'],1,2,'L',true);
+	$pdf->Cell(135,12,$scannerData['name'],1,2,'L',true);
 	$pdf->Cell(135,12,$technique,1,2,'L',true);
-	$pdf->Cell(135,12,"172.28.128.1/24",1,2,'L',true);
-	$pdf->Cell(135,12,"3",1,2,'L',true);
+	$pdf->Cell(135,12,$scannerData['target'],1,2,'L',true);
+	$pdf->Cell(135,12,count($totalHosts),1,2,'L',true);
 	$pdf->Cell(135,12,$totalPorts,1,2,'L',true);
 	$pdf->Cell(135,12,$vulnData[0]+$vulnData[1]+$vulnData[2]+$vulnData[3],1,2,'L',true);
 
@@ -265,64 +267,117 @@ function generatePDF($id_scanner)
 		}
 	}
 
-	$pdf->Output("D","scan-report.pdf");
-	/**
-	  Create the table
-	**/
-/*
-	$pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
-	$pdf->Ln( 15 );
+	$pdf->AddPage('L');
 
-	// Create the table header row
-	$pdf->SetFont( 'Arial', 'B', 15 );
+	// header
+	$pdf->SetFont('Times','',11);
+	$pdf->SetTextColor(100,100,100);
+	$pdf->SetDrawColor(0,0,0);
+	$pdf->Cell(276,9,"Academia Tehnica Militara \"Ferdinand I\" Bucuresti",1,0,'C');
+	$pdf->Ln(15);
 
-	// "PRODUCT" cell
-	$pdf->SetTextColor( $tableHeaderTopProductTextColour[0], $tableHeaderTopProductTextColour[1], $tableHeaderTopProductTextColour[2] );
-	$pdf->SetFillColor( $tableHeaderTopProductFillColour[0], $tableHeaderTopProductFillColour[1], $tableHeaderTopProductFillColour[2] );
-	$pdf->Cell( 46, 12, " PRODUCT", 1, 0, 'L', true );
+	$i = 0;
+	$counter = count($totalHosts);
+	foreach ($totalHosts as $host) 
+	{
+		$pdf->SetTextColor(0,128,255);
+		$pdf->SetFont('Times','B',22);
+		$pdf->Cell(30,10,"Host Details",0,0,'L',false);
+		$pdf->Ln(15);
 
-	// Remaining header cells
-	$pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
-	$pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->SetDrawColor(0,0,0);
+		$pdf->SetFillColor(200,200,200);
 
-	for ( $i=0; $i<count($columnLabels); $i++ ) {
-	  $pdf->Cell( 36, 12, $columnLabels[$i], 1, 0, 'C', true );
+		$pdf->Cell(50,10,"Host OS: ",'B',0,"L",false);
+		$pdf->Cell(226,10,$host['OS'],'B',1,'L',false);
+		$pdf->Cell(50,10,"Host IP: ",'B',0,"L",false);
+		$pdf->Cell(226,10,$host['IP'],'B',1,'L',false);
+		$pdf->Cell(50,10,"Host MAC: ",'B',0,"L",false);
+		$pdf->Cell(226,10,$host['MAC'],'B',1,'L',false);
+		$pdf->Cell(50,10,"Host MAC Vendor: ",'B',0,"L",false);
+		$pdf->Cell(226,10,$host['mac_vendor'],'B',1,'L',false);
+
+		$pdf->Ln(10);
+		$pdf->SetTextColor(0,128,255);
+		$pdf->SetFont('Times','B',22);
+		$pdf->Cell(30,10,"Port Details",0,0,'L',false);
+		$pdf->Ln(15);
+		$pdf->SetFont('Arial','',14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->SetDrawColor(255,255,255);
+		$pdf->SetFillColor(200,200,200);
+
+	//	$pdf->Cell(55,12,"Vulnerabilities found",1,1,'L',true);
+		$pdf->Cell(30,10,"Port",1,0,'C',true);
+		$pdf->Cell(26,10,"State",1,0,'C',true);
+		$pdf->Cell(30,10,"Service",1,0,'C',true);
+		$pdf->Cell(70,10,"Product",1,0,'C',true);
+		$pdf->Cell(50,10,"Version",1,0,'C',true);
+		$pdf->Cell(70,10,"Extra Info",1,0,'C',true);
+		$pdf->Ln();
+
+		$pdf->SetFont('Arial','',10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->SetDrawColor(0,0,0);
+
+		foreach ($portsData as $port) {
+			if($port['id_host']===$host['id_host'])
+			{
+				$pdf->Cell(30,10,$port['port_number']."/".$port['protocol'],1,0,'C',false);
+				$pdf->Cell(26,10,$port['state'],1,0,'C',false);
+				$pdf->Cell(30,10,$port['service'],1,0,'C',false);
+				$pdf->Cell(70,10,$port['product'],1,0,'C',false);
+				$pdf->Cell(50,10,$port['version'],1,0,'C',false);
+				$pdf->Cell(70,10,$port['extra'],1,1,'C',false);
+			}			
+		}
+
+		$pdf->Ln(10);
+		$pdf->SetTextColor(0,128,255);
+		$pdf->SetFont('Times','B',22);
+		$pdf->Cell(30,10,"Vulnerabilities Details",0,0,'L',false);
+		$pdf->Ln(15);
+				$pdf->SetTextColor(0,128,255);
+		$pdf->SetFont('Times','B',22);
+		$pdf->Cell(30,10,"Port",1,0,'C',true);
+		$pdf->Cell(30,10,"Service",1,0,'C',true);
+		$pdf->Cell(60,10,"CVE",1,0,'C',true);
+		$pdf->Cell(30,10,"Score",1,0,'C',true);
+		$pdf->Cell(80,10,"Link",1,0,'C',true);
+		
+		foreach ($vulnRows as $vuln) {
+			if($vuln['id_host']===$host['id_host'])
+			{
+				$pdf->Ln(10);
+				$pdf->SetFont('Arial','',10);
+				$pdf->SetTextColor(0,0,0);
+				$pdf->SetDrawColor(0,0,0);
+				$pdf->Cell(30,10,$vuln['port_number']."/".$port['protocol'],1,0,'C',false);
+				$pdf->Cell(30,10,$vuln['service'],1,0,'C',false);
+				$pdf->Cell(60,10,$vuln['id_cve'],1,0,'C',false);
+				$pdf->Cell(30,10,$vuln['score'],1,0,'C',false);
+				$pdf->Cell(80,10,$vuln['link'],1,0,'C',false);
+
+			}
+		}
+		if($i != $counter - 1)
+		{
+			$pdf->AddPage('L');
+			// header
+			$pdf->SetFont('Times','',11);
+			$pdf->SetTextColor(100,100,100);
+			$pdf->SetDrawColor(0,0,0);
+			$pdf->Cell(276,9,"Academia Tehnica Militara \"Ferdinand I\" Bucuresti",1,0,'C');
+			$pdf->Ln(15);
+		}
+		$i++;
+
 	}
-
-	$pdf->Ln( 12 );
-
-	// Create the table data rows
-
-	$fill = false;
-	$row = 0;
-
-	foreach ( $data as $dataRow ) {
-
-	  // Create the left header cell
-	  $pdf->SetFont( 'Arial', 'B', 15 );
-	  $pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
-	  $pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
-	  $pdf->Cell( 46, 12, " " . $rowLabels[$row], 1, 0, 'L', $fill );
-
-	  // Create the data cells
-	  $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
-	  $pdf->SetFillColor( $tableRowFillColour[0], $tableRowFillColour[1], $tableRowFillColour[2] );
-	  $pdf->SetFont( 'Arial', '', 15 );
-
-	  for ( $i=0; $i<count($columnLabels); $i++ ) {
-	    $pdf->Cell( 36, 12, ( '$' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
-	  }
-
-	  $row++;
-	  $fill = !$fill;
-	  $pdf->Ln( 12 );
-	}
-
-
-
-	/***
-	  Serve the PDF
-	***/
+	
+	$pdf->Output("D","scan-report-".$id_scanner.".pdf");
+	
 }
 
 ?>
