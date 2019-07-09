@@ -1,13 +1,5 @@
 <?php
 
-/*
-  An Example PDF Report Using FPDF
-  by Matt Doyle
-
-  From "Create Nice-Looking PDFs with PHP and FPDF"
-  http://www.elated.com/articles/create-nice-looking-pdfs-php-fpdf/
-*/
-
 require_once( "FPDF/fpdf.php" );
 require_once("dashboard-processing.php");
 
